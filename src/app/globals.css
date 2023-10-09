@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --fc-slot-border-radius: 0.5rem;
+}
+
+::selection {
+  background-color: #5498DC;
+  color: #fff;
+}
+
+body {
+  background-color: #fff;
+  max-height: 100vh;
+  overflow: hidden;
+}

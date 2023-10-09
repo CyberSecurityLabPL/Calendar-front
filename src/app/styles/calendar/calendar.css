@@ -1,0 +1,51 @@
+.fc-timegrid-now-indicator-container {
+    background-color: #fff;
+}
+
+.fc-non-business {
+    cursor: not-allowed;
+}
+
+.fc-media-screen {
+    border-radius: 8px;
+}
+
+.fc-daygrid-day-frame {
+    background-color: #fff;
+}
+
+th.fc-col-header-cell {
+    border: none;
+    padding: 1rem;
+    text-align: center;
+    background-color:  rgba(84, 152, 220, .3);
+    color: #5498DC;
+}
+
+.fc-timegrid-axis {
+    background-color: rgba(84, 152, 220, .3);
+    border-radius: 8px 0 0 0;
+}
+
+.fc-timegrid-slots tbody > tr {
+    height: 65px;
+}
+
+.fc .fc-button-primary,
+.fc .fc-button-primary:hover,
+.fc .fc-button-primary:focus,
+.fc .fc-button-primary:not(:disabled).fc-button-active, 
+.fc .fc-button-primary:not(:disabled):active {
+    background-color: #5498DC;
+    border: none;
+    box-shadow: none !important;
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active {
+    background-color: #468dd4;
+    border: none;
+}
+
+th:last-child {
+    border-radius: 0 8px 0 0;
+}
