@@ -17,28 +17,30 @@ export default function UserContextProvider({ children }: { children: React.Reac
         localStorage.setItem('user', JSON.stringify(user));
     }
 
-    const getUser = () => {
-        if (user) {
-          return user;
-        }
+    if (typeof window !== 'undefined') {
+        const getUser = () => {
+            if (user) {
+            return user;
+            }
 
-        const localStorageUser = localStorage.getItem('user');
-    
-        if (localStorageUser) {
-          return JSON.parse(localStorageUser);
-        }
-    
-        return null;
-      };
+            const localStorageUser = localStorage.getItem('user');
+        
+            if (localStorageUser) {
+            return JSON.parse(localStorageUser);
+            }
+        
+            return null;
+        };
 
-    return (
-        <UserContext.Provider value={{
-            user: getUser(),
-            setUser: saveUser
-        }}>
-            {children}
-        </UserContext.Provider>
-    )
+        return (
+            <UserContext.Provider value={{
+                user: getUser(),
+                setUser: saveUser
+            }}>
+                {children}
+            </UserContext.Provider>
+        )
+    }
 }
 
 export function useUserContext() {

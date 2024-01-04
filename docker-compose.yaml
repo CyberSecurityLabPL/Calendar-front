@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  next-app:
+    container_name: csl-calendar-front
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 3000:3000
+    networks:
+      - my_network
+
+networks:
+  my_network:
+    driver: bridge
