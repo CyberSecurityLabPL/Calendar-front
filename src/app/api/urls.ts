@@ -1,5 +1,5 @@
-const DEV_API_URL = ""
-const PROD_API_URL = "🤠"
+const DEV_API_URL = "http://192.168.96.21:8000"
+const PROD_API_URL = "http://192.168.96.21:8000/"
 
 export const API_URL = () =>
     process.env.NODE_ENV === "development" ? DEV_API_URL : PROD_API_URL
