@@ -1,4 +1,4 @@
-const DEV_API_URL = "http://192.168.96.21:8000"
+const DEV_API_URL = "http://localhost:8080/"
 const PROD_API_URL = "http://192.168.96.21:8000/"
 
 export const API_URL = () =>

@@ -12,12 +12,7 @@ export const Navbar = () => {
     const { setUser } = useUserContext();
     const handleSignOut = () => {
         toast.success('Wylogowano pomyślnie');
-
-        localStorage.removeItem('token');
-        localStorage.removeItem('refreshToken');
-
         setUser(null);
-        
         router.push('/login');
     };
 

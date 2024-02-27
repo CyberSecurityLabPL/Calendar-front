@@ -10,18 +10,11 @@ export const useAuth = () => {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(user)
+                body: JSON.stringify(user),
+                credentials: "include"
             });
 
-            const json = await response.json();
-
-            if (json.token) {
-                 localStorage.setItem("token", json.token);
-                 localStorage.setItem("refreshToken", json.refreshToken);
-
-                return json;
-                
-            } else {
+            if (response.status !== 200) {
                 throw new Error("Logowanie nie powiodło się");
             }
         });
