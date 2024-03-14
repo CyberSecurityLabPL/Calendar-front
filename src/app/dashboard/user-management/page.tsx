@@ -9,28 +9,45 @@ import { GetSubordinatesProps } from "@/app/hooks/get-workers/types";
 import React, { useEffect, useState } from "react";
 import { HoursSidebar } from "@/app/components/dashboard/HoursSidebar";
 import { User } from "iconsax-react";
+import toast from "react-hot-toast";
 import { UserInfo } from "@/app/hooks/user-info/types";
 import { useUserContext } from "@/app/actions/UserContext";
 import { useAddUserModal } from "@/app/hooks/useAddUserModal";
+import { useRouter } from "next/navigation";
 
 
 export default function UserManagementPage() {
 
+
+    const router = useRouter();
+    const { setUser } = useUserContext();
+
+    
     const addUserModal = useAddUserModal();
     const [userData, setUserData] = useState(null);
     const { user } = useUserContext();
 
+
+    
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const userInfo = user as any;
-                setUserData(userInfo);
-            } catch (error) {
-                console.error('Error fetching user hours:', error);
-            }
-        };
-        fetchData();
+        if (!user) {
+            router.push("/login");
+        } else {
+            
+                const fetchData = async () => {
+                    try {
+                        const userInfo = user as any;
+                        setUserData(userInfo);
+                    } catch (error) {
+                        console.error('Error fetching user hours:', error);
+                        toast.success('nie ma cie');
+                    }
+                };
+                fetchData();
+        }
     }, []);
+
+    
 
 
     return (

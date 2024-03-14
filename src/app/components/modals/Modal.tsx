@@ -55,17 +55,18 @@ export const Modal: React.FC<ModalProps> = ({
         onSubmit();
     }, [onSubmit, disabled]);
 
+
     if (!isOpen) {
         return null;
     }
 
     return (
         <>
-            <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-[222] outline-none focus:outline-none bg-neutral-800/10">
-                <div className="relative w-[600px] md:w-4/6 lg:w-3/6 xl:w-2/5 my-6 mx-auto h-full lg:h-auto md:h-auto">
+            <div className="justify-center pt-10 max-[770px]:grid items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-[222] outline-none focus:outline-none bg-neutral-800/10">
+                <div className="relative rounded-none pt-10 w-[600px] md:w-4/6 lg:w-3/6 xl:w-2/5 my-6 mx-auto h-full lg:h-auto md:h-auto">
                     {/* Content */}
                     <div className={`translate duration-300 h-full ${showModal ? 'translate-y-0' : 'translate-y-full'} ${showModal ? 'opacity-100' : 'opacity-0'}`}>
-                        <div className="translate h-full lg:h-auto md:h-auto border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                        <div className="translate max-[770px]:p-10 h-full lg:h-auto md:h-auto border-0 max-[770px]:bg-transparent max-[770px]:rounded-none rounded-lg max-[770px]:shadow-none relative flex flex-col w-full bg-white outline-none focus:outline-none">
                             {/* Header */}
                             <div className="flex items-center p-6 rounded-t justify-center relative">
                                 {user && (

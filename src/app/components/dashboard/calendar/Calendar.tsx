@@ -1,25 +1,28 @@
 "use client"
 
-import FullCalendar from "@fullcalendar/react"
-import dayGridPlugin from '@fullcalendar/daygrid'
-import interactionPlugin from '@fullcalendar/interaction'
-import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
-import timeGridPlugin from '@fullcalendar/timegrid'
-import { handleEventClick, handleEvents, renderEventContent } from "@/app/actions/calendar/EventHandlers"
-import { Hours } from "@/app/hooks/hours/types"
-import { Calendar, Printer } from "iconsax-react"
-import "@/app/styles/calendar/calendar.css"
-import { useModals } from "@/app/hooks/useModals"
-import { HoursStatusModal } from "../../modals/HoursStatusModal"
-import { AddHourModal } from "../../modals/AddHourModal"
-import { useAddHourModal } from "@/app/hooks/useAddHourModal"
-import { DateSelectArg } from "@fullcalendar/core"
-import { useHours } from "@/app/hooks/hours/useHours"
-import toast from "react-hot-toast"
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from '@fullcalendar/interaction';
+import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import { handleEventClick, handleEvents, renderEventContent } from "@/app/actions/calendar/EventHandlers";
+import { Hours } from "@/app/hooks/hours/types";
+import { Calendar, Printer } from "iconsax-react";
+import "@/app/styles/calendar/calendar.css";
+import { useModals } from "@/app/hooks/useModals";
+import { HoursStatusModal } from "../../modals/HoursStatusModal";
+import { AddHourModal } from "../../modals/AddHourModal";
+import { useAddHourModal } from "@/app/hooks/useAddHourModal";
+import { DateSelectArg } from "@fullcalendar/core";
+import { useHours } from "@/app/hooks/hours/useHours";
+import toast from "react-hot-toast";
 import { useUserContext } from "@/app/actions/UserContext"
 import { usePrintTasks } from "@/app/hooks/hours-pdfs/usePrintTasks"
 import { usePrintHours } from "@/app/hooks/hours-pdfs/usePrintHours"
-import Swal from "sweetalert2"
+import Swal from "sweetalert2";
+import {useEffect } from "react"
+import { useRouter } from "next/navigation"
+
 
 export interface CalendarProps {
     userHours: Hours[];
@@ -31,11 +34,17 @@ export const CalendarComponent = ({
     userId,
 }: CalendarProps) => {
     const hoursStatusModal = useModals();
+    const router = useRouter();
     const { addHours } = useHours(userId);
     const addHourModal = useAddHourModal();
-    const { user } = useUserContext();
     const { hoursBlob } = usePrintHours(userId);
     const { tasksBlob } = usePrintTasks(userId);
+    const { user } = useUserContext();
+    useEffect(() => {
+        if (!user) {
+            router.push("/login");
+        }
+    }, [ ]);
 
     const printHoursOnClick = async () => {
         try {
@@ -127,13 +136,15 @@ export const CalendarComponent = ({
                     </h1>
                 </div>
                 <div className="flex gap-4">
-                    <button onClick={printHoursOnClick}
-                        className="flex gap-2 cursor-pointer">
+                    <button
+                        className="flex gap-2 cursor-pointer"
+                        onClick={printHoursOnClick}>
                         <p>Drukuj godzinówkę</p>
                         <Printer size={24} />
                     </button>
-                    <button onClick={printTasksOnClick}
-                        className="flex gap-2 cursor-pointer">
+                    <button
+                        className="flex gap-2 cursor-pointer"
+                        onClick={printTasksOnClick}>
                         <p>Drukuj zadania</p>
                         <Printer size={24} />
                     </button>
@@ -141,7 +152,7 @@ export const CalendarComponent = ({
             </div>
             <div className="border-[.5px] gap-4 p-4 rounded-lg bg-white flex flex-col">
                 <FullCalendar
-                    height={650}
+                    height={490}
                     plugins={[
                         resourceTimelinePlugin,
                         dayGridPlugin,
@@ -167,13 +178,11 @@ export const CalendarComponent = ({
                     allDaySlot={false}
                     forceEventDuration={true}
                     defaultAllDayEventDuration={{ hour: 8 }}
-                    businessHours={
-                        {
-                            daysOfWeek: [1, 2, 3, 4, 5],
-                            startTime: '08:00',
-                            endTime: '16:00',
-                        }
-                    }
+                    businessHours={{
+                        daysOfWeek: [1, 2, 3, 4, 5],
+                        startTime: '08:00',
+                        endTime: '16:00',
+                    }}
                     nowIndicator={false}
                     editable={true}
                     selectable={false}
@@ -184,25 +193,21 @@ export const CalendarComponent = ({
                     select={handleDateSelect}
                     eventContent={renderEventContent}
                     eventClick={handleEventClick}
-                    events={
-                        userHours.map(hour => ({
-                            title: hour.tasks,
-                            start: hour.startTime,
-                            end: hour.endTime,
-                            url: hour.hoursId.toString(),
-                        }))
-                    }
+                    events={userHours.map(hour => ({
+                        title: hour.tasks,
+                        start: hour.startTime,
+                        end: hour.endTime,
+                        url: hour.hoursId.toString(),
+                    }))}
                     eventsSet={handleEvents}
                     eventMaxStack={1}
                     locale={"pl"}
-                    buttonText={
-                        {
-                            today: "Dzisiaj",
-                            month: "Miesiąc",
-                            week: "Tydzień",
-                            day: "Dzień",
-                        }
-                    }
+                    buttonText={{
+                        today: "Dzisiaj",
+                        month: "Miesiąc",
+                        week: "Tydzień",
+                        day: "Dzień",
+                    }}
                     slotDuration={"01:00:00"}
                     eventBackgroundColor="rgba(84, 152, 220, .15)"
                     eventDisplay={"list-item"}

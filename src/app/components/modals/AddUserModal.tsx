@@ -38,31 +38,9 @@ export const AddUserModal = () => {
         },
     });
 
-    const { addUser } = useAddUser();
-
-    const onSubmit: SubmitHandler<AddUserRequest> = async (data) => {
-
-        setIsLoading(true);
-
-        const newUserData = await addUser.mutateAsync(data, {
-
-            onSuccess: () => {
-                toast.success('Użytkownik dodany pomyślnie');
-                useModal.onClose
-                setIsLoading(false);
-
-                queryClient.invalidateQueries({ queryKey: ["firstName", "lastName", "email", "companyId", "role", "workStart", "position", "contract"] });
-            },
-
-            onError: () => {
-                toast.error("Użytkownik nie został dodany");
-                setIsLoading(false);
-            }
-        })
-    }
 
     const bodyContent = (
-        <div className="flex flex-col gap-4">
+        <div className="flex-auto flex-col gap-4">
             <Input
                 id="email"
                 label="Email"
@@ -130,6 +108,26 @@ export const AddUserModal = () => {
             />
         </div>
     )
+
+    const { addUser } = useAddUser();
+
+    const onSubmit: SubmitHandler<AddUserRequest> = async (data) => {
+        setIsLoading(true);
+    
+        const newUserData = await addUser.mutateAsync(data, {
+            onSuccess: () => {
+                toast.success('Użytkownik dodany pomyślnie');
+                useModal.onClose(); // Call the onClose function
+                setIsLoading(false);
+    
+                queryClient.invalidateQueries(["firstName", "lastName", "email", "companyId", "role", "workStart", "position", "contract"]); // Pass an array of strings as the queryKey
+            },
+            onError: () => {
+                toast.error("Użytkownik nie został dodany");
+                setIsLoading(false);
+            }
+        });
+    }
 
     return (
         <Modal

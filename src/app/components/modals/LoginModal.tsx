@@ -5,7 +5,7 @@ import {
     SubmitHandler,
     useForm
 } from "react-hook-form"
-
+import { useUserContext } from "@/app/actions/UserContext";
 import { Modal } from "./Modal"
 import { Input } from "../inputs/Input"
 import { toast } from "react-hot-toast"
@@ -14,6 +14,7 @@ import { useAuth } from "@/app/hooks/auth/useAuth"
 import { LoginRequest } from "@/app/hooks/auth/types"
 import { Button } from "../Button"
 import { Eye } from "iconsax-react"
+import { useGetMyInfo } from "@/app/hooks/user-info/useGetMyInfo";
 
 export const LoginModal = () => {
     const router = useRouter();
@@ -31,29 +32,37 @@ export const LoginModal = () => {
             password: ''
         },
     });
-
+    const { userInfo } = useGetMyInfo();
+    const [userData, setUserData] = useState(null);
+    const { user } = useUserContext();
+    // Redirect to login page if user is not authenticated
+    useEffect(() => {
+        if (user) {
+            router.push("/dashboard");
+        }
+    }, []);
     const { login } = useAuth();
 
     const onSubmit: SubmitHandler<LoginRequest> = async (data) => {
-        setIsLoading(true);
-        try {
-            const loginData = await login.mutateAsync(data, {
-                onSuccess: async () => {
-                    toast.success('Zalogowano pomyślnie');
-                    setIsLoading(false);
-                    router.push("/dashboard");
-                },
-                onError: () => {
-                    toast.error("Nie udało się zalogować");
+                setIsLoading(true);
+                try {
+                    const loginData = await login.mutateAsync(data, {
+                        onSuccess: async () => {
+                            toast.success('Zalogowano pomyślnie');
+                            setIsLoading(false);
+                            router.push("/dashboard");
+                        },
+                        onError: () => {
+                            toast.error("Nie udało się zalogować");
+                            setIsLoading(false);
+                        }
+                    });
+        
+                } catch (error) {
+                    console.error("Error during login:", error);
                     setIsLoading(false);
                 }
-            });
-
-        } catch (error) {
-            console.error("Error during login:", error);
-            setIsLoading(false);
-        }
-    };
+            };
 
 
     const bodyContent = (
@@ -94,7 +103,7 @@ export const LoginModal = () => {
     return (
         <>
             <div className="flex flex-col z-[222] items-center justify-center gap-8">
-            <h1 className="text-center leading-none font-bold text-[72px] p-16 text-white z-[223] m-0">👋<span className="text-[#5498DC]">Witaj</span> w <br /><span className="text-[#5498DC]">CSL</span>Schedule📅</h1>
+            <h1 className="text-center max-[770px]:text-[44px] leading-none font-bold text-[74px] max-[770px]:p-10 text-white z-[223] m-0">👋<span className="text-[#5498DC]">Witaj</span> w <br /><span className="text-[#5498DC]">CSL</span>Schedule📅</h1>
                 <Modal
                     disabled={isLoading}
                     isOpen={true}

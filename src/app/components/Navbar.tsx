@@ -4,12 +4,13 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { Calendar, Clock, LogoutCurve, Profile2User } from "iconsax-react";
 import { useUserContext } from "../actions/UserContext";
+import { useGetMyInfo } from "@/app/hooks/user-info/useGetMyInfo";
+
 
 
 export const Navbar = () => {
     const router = useRouter();
-    const { user } = useUserContext();
-    const { setUser } = useUserContext();
+    const { user, setUser } = useUserContext();
     const handleSignOut = () => {
         toast.success('Wylogowano pomyślnie');
         setUser(null);
