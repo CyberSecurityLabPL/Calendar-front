@@ -18,10 +18,6 @@ export default function HoursPage() {
     const [userData, setUserData] = useState(null);
     const { user } = useUserContext();
     const router = useRouter();
-    const { setUser } = useUserContext();
-    const addUserModal = useAddUserModal();
-
-    // Redirect to login page if user is not authenticated
     useEffect(() => {
         if (!user) {
             router.push("/login");

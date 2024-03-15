@@ -9,7 +9,7 @@ import { useEditUserModal } from '@/app/hooks/useEditUserModal';
 export interface DropDownMenuProps {
     user: any;
     setUserToEdit: (user: any) => void;
-    userId: number;
+    userId: string;
 }
 
 export const DropDownMenu = ({ user, setUserToEdit, userId }: DropDownMenuProps) => {
@@ -31,7 +31,7 @@ export const DropDownMenu = ({ user, setUserToEdit, userId }: DropDownMenuProps)
 
    const handleDeleteUser = async () => {
     try {
-        const deleteUserData = await deleteUser.mutateAsync(userId);
+        const deleteUserData = await deleteUser.mutateAsync(Number(userId));
         toast.success('Użytkownik został usunięty');
     } catch (error) {
         console.error('Error during deleting user:', error);

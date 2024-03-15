@@ -47,9 +47,6 @@ export default function UserManagementPage() {
         }
     }, []);
 
-    
-
-
     return (
         <>
             <div className="z-50 flex h-[100vh] gap-9 items-start justify-between min-h-screen p-4">

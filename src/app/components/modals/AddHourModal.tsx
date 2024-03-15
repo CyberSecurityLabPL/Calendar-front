@@ -32,8 +32,8 @@ export const AddHourModal = () => {
         formState: { errors },
     } = useForm<Hours>({
         defaultValues: {
-            UserId: 0,
-            hoursId: 0,
+            UserId: '',
+            hoursId: '',
             startTime: `${getCurrentDateFormatted()}T08:00:00`,
             endTime: `${getCurrentDateFormatted()}T16:00:00`,
             tasks: "Praca",

@@ -1,5 +1,5 @@
 export interface MyInfo {
-    id: number,
+    id: string,
     firstName: string,
     lastName: string,
     email: string,
@@ -15,7 +15,7 @@ export interface MyInfo {
 }
 
 export interface UserInfo {
-    id: number,
+    id: string,
     firstName: string,
     lastName: string,
     email: string,

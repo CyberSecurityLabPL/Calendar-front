@@ -193,12 +193,12 @@ export const CalendarComponent = ({
                     select={handleDateSelect}
                     eventContent={renderEventContent}
                     eventClick={handleEventClick}
-                    events={userHours.map(hour => ({
+                    events={Array.isArray(userHours) ? userHours.map(hour => ({
                         title: hour.tasks,
                         start: hour.startTime,
                         end: hour.endTime,
                         url: hour.hoursId.toString(),
-                    }))}
+                    })) : []}
                     eventsSet={handleEvents}
                     eventMaxStack={1}
                     locale={"pl"}

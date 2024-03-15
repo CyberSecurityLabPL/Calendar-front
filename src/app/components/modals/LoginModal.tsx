@@ -6,7 +6,7 @@ import {
     useForm
 } from "react-hook-form"
 import { useUserContext } from "@/app/actions/UserContext";
-import { Modal } from "./Modal"
+import { Modallogin } from "./modallogin"
 import { Input } from "../inputs/Input"
 import { toast } from "react-hot-toast"
 import { useRouter } from "next/navigation"
@@ -104,7 +104,7 @@ export const LoginModal = () => {
         <>
             <div className="flex flex-col z-[222] items-center justify-center gap-8">
             <h1 className="text-center max-[770px]:text-[44px] leading-none font-bold text-[74px] max-[770px]:p-10 text-white z-[223] m-0">👋<span className="text-[#5498DC]">Witaj</span> w <br /><span className="text-[#5498DC]">CSL</span>Schedule📅</h1>
-                <Modal
+                <Modallogin
                     disabled={isLoading}
                     isOpen={true}
                     actionLabel="Zaloguj się"
