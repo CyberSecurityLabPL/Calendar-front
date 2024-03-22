@@ -24,7 +24,6 @@ export default function Calendar({ params }: { params: { slug: string } }) {
     const addUserModal = useAddUserModal();
     const [userData, setUserData] = useState(null);
 
-    // Redirect to login page if user is not authenticated
     useEffect(() => {
         if (!user) {
             router.push("/login");

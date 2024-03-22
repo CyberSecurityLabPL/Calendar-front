@@ -184,12 +184,12 @@ export const CalendarComponent = ({
                         endTime: '16:00',
                     }}
                     nowIndicator={false}
-                    editable={true}
+                    editable={false}
                     selectable={false}
                     selectMirror={true}
                     dayMaxEventRows={3}
                     schedulerLicenseKey="CC-Attribution-NonCommercial-NoDerivatives"
-                    dayMaxEvents={1}
+                    dayMaxEvents={3}
                     select={handleDateSelect}
                     eventContent={renderEventContent}
                     eventClick={handleEventClick}
@@ -200,7 +200,7 @@ export const CalendarComponent = ({
                         url: hour.hoursId.toString(),
                     })) : []}
                     eventsSet={handleEvents}
-                    eventMaxStack={1}
+                    eventMaxStack={2}
                     locale={"pl"}
                     buttonText={{
                         today: "Dzisiaj",
