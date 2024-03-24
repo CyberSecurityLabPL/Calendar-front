@@ -1,4 +1,4 @@
-const DEV_API_URL = "http://192.168.96.21:8000"
+const DEV_API_URL = "http://localhost:8080/"
 const PROD_API_URL = "http://192.168.96.21:8000/"
 
 export const API_URL = () =>
@@ -7,6 +7,8 @@ export const API_URL = () =>
 export const API_URLS = {
     LOGIN: `${API_URL()}auth/signin`,
     REFRESH: `${API_URL()}auth/refresh`,
+
+    GET_ALL_COMPANIES: `${API_URL()}api/company/all`,
 
     GET_ALL_USER_TASKS: `${API_URL()}api/hours/getAllHoursForUser`,
     ADD_USER_TASK: `${API_URL()}api/hours/add`,

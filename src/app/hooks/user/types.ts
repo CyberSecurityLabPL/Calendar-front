@@ -1,8 +1,10 @@
+import { list } from "postcss"
+
 export interface AddUserRequest {
     firstName: string,
     lastName: string,
     email: string,
-    companyId: number,
+    companyId: string,
     role: string,
     contract: string,
     workStart: string,
@@ -27,5 +29,5 @@ export interface EditUserRequest {
         bankAccount: string
     },
     password: string,
-    companyId: number
+    companyId: number[]
 }

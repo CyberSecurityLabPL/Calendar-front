@@ -18,15 +18,6 @@ export const useActivation = () => {
                 console.error("Error while activating user:", response.error);
                 throw response.error;
             }
-
-            const json = await response.json();
-
-            if (json.token) {
-                localStorage.setItem("token", json.token);
-                localStorage.setItem("refreshToken", json.refreshToken);
-
-                return json;
-            }
         });
 
     return {

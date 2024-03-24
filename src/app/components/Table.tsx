@@ -154,7 +154,7 @@ export const Table = <T extends GetSubordinatesProps | TotalHours | UserInfo>({ 
     return (
         <>
             {isLoading && <div className="flex justify-center items-center w-full h-[550px] rounded-lg bg-white"> Loading... </div>}
-            <div className="border-[.5px] w-full h-[550px] p-4 rounded-lg flex flex-col items-end gap-4">
+            <div className="border-[.5px] w-full h-[400px] p-4 rounded-lg flex flex-col items-end gap-4">
                 <div className="self-start flex items-center gap-4">
                     <SearchNormal1 size={24} color="#737373" />
                     <input className="self-start p-2 outline-none"

@@ -9,29 +9,37 @@ import { GetSubordinatesProps } from "@/app/hooks/get-workers/types";
 import React, { useEffect, useState } from "react";
 import { HoursSidebar } from "@/app/components/dashboard/HoursSidebar";
 import { User } from "iconsax-react";
+import toast from "react-hot-toast";
 import { UserInfo } from "@/app/hooks/user-info/types";
 import { useUserContext } from "@/app/actions/UserContext";
 import { useAddUserModal } from "@/app/hooks/useAddUserModal";
+import { useRouter } from "next/navigation";
 
 
 export default function UserManagementPage() {
 
+    const router = useRouter();
+    const { setUser } = useUserContext();
     const addUserModal = useAddUserModal();
     const [userData, setUserData] = useState(null);
     const { user } = useUserContext();
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const userInfo = user as any;
-                setUserData(userInfo);
-            } catch (error) {
-                console.error('Error fetching user hours:', error);
-            }
-        };
-        fetchData();
+        if (!user) {
+            router.push("/login");
+        } else {
+            const fetchData = async () => {
+                try {
+                    const userInfo = user as any;
+                    setUserData(userInfo);
+                } catch (error) {
+                    console.error('Error fetching user hours:', error);
+                    toast.success('nie ma cie');
+                }
+            };
+            fetchData();
+        }
     }, []);
-
 
     return (
         <>
@@ -46,17 +54,16 @@ export default function UserManagementPage() {
                         </h1>
                     </div>
                     <div className="flex flex-col gap-4 w-full items-end justify-center p-4 rounded-lg border-[0.5px] bg-white">
-                        {user && (user.role === "ROLE_ADMIN") && (
-                        <div className="w-[200px]">
-                            <Button label={"Dodaj użytkownika"}
-                                onClick={addUserModal.onOpen}
-                            />
-                        </div>
+                        {user && user.role === "ROLE_ADMIN" && (
+                            <div className="w-[200px]">
+                                <Button
+                                    label={"Dodaj użytkownika"}
+                                    onClick={addUserModal.onOpen}
+                                />
+                            </div>
                         )}
-                        {user?.role === "ROLE_ADMIN" && (
-                            <Table<UserInfo> dataType="usersInfo" />
-                        )}
-                        {user && (user.role === "ROLE_MANAGER") && (
+                        
+                        {user && user.role === "ROLE_MANAGER" && (
                             <Table<GetSubordinatesProps> dataType="subordinates" />
                         )}
                     </div>
@@ -64,5 +71,5 @@ export default function UserManagementPage() {
                 <AddUserModal />
             </div>
         </>
-    )
+    );
 }

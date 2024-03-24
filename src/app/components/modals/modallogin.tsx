@@ -1,7 +1,6 @@
 "use client"
 
 import { useCallback, useEffect, useState } from "react";
-import { IoMdClose } from "react-icons/io";
 import { Button } from "../Button";
 import { useUserContext } from "@/app/actions/UserContext";
 
@@ -16,7 +15,7 @@ interface ModalProps {
     disabled?: boolean;
 }
 
-export const Modal: React.FC<ModalProps> = ({
+export const Modallogin: React.FC<ModalProps> = ({
     isOpen,
     onClose,
     onSubmit,
@@ -69,13 +68,6 @@ export const Modal: React.FC<ModalProps> = ({
                         <div className="translate max-[770px]:p-10 h-full lg:h-auto md:h-auto border-0 max-[770px]:bg-transparent max-[770px]:rounded-none rounded-lg max-[770px]:shadow-none relative flex flex-col w-full bg-white outline-none focus:outline-none">
                             {/* Header */}
                             <div className="flex items-center p-6 rounded-t justify-center relative">
-                                {user && (
-                                <button className="p-1 border-0 hover:opacity-70 transition absolute right-5"
-                                    onClick={handleClose}>
-                                    <IoMdClose size={18}
-                                    />
-                                </button>
-                                )}
                                 <div className="text-lg font-semibold">
                                     {title}
                                 </div>

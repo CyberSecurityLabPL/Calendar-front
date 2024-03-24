@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import {
     SubmitHandler,
     useForm
@@ -13,12 +13,13 @@ import { useAddUser } from "@/app/hooks/user/useAddUser"
 import { useModals } from "@/app/hooks/useModals"
 import { useQueryClient } from "@tanstack/react-query"
 import { useAddUserModal } from "@/app/hooks/useAddUserModal"
+import useCompany from "@/app/hooks/company/useCompany"
 
 export const AddUserModal = () => {
     const [isLoading, setIsLoading] = useState(false);
     const useModal = useAddUserModal();
     const queryClient = useQueryClient();
-
+    const {data} = useCompany();
     const {
         register,
         handleSubmit,
@@ -30,39 +31,18 @@ export const AddUserModal = () => {
             firstName: "",
             lastName: "",
             email: "",
-            companyId: 0,
+            companyId: "",
             role: "",
             workStart: "",
             position: "",
             contract: "",
         },
     });
-
-    const { addUser } = useAddUser();
-
-    const onSubmit: SubmitHandler<AddUserRequest> = async (data) => {
-
-        setIsLoading(true);
-
-        const newUserData = await addUser.mutateAsync(data, {
-
-            onSuccess: () => {
-                toast.success('Użytkownik dodany pomyślnie');
-                useModal.onClose
-                setIsLoading(false);
-
-                queryClient.invalidateQueries({ queryKey: ["firstName", "lastName", "email", "companyId", "role", "workStart", "position", "contract"] });
-            },
-
-            onError: () => {
-                toast.error("Użytkownik nie został dodany");
-                setIsLoading(false);
-            }
-        })
-    }
-
+    useEffect(() => {
+        console.log(data);
+    }, [data]);
     const bodyContent = (
-        <div className="flex flex-col gap-4">
+        <div className="flex-auto flex-col gap-4">
             <Input
                 id="email"
                 label="Email"
@@ -87,14 +67,16 @@ export const AddUserModal = () => {
                 errors={errors}
                 required
             />
-            <Input
+            
+            <select
                 id="companyId"
-                label="ID firmy"
+                className="input"
                 disabled={isLoading}
-                register={register}
-                errors={errors}
-                required
-            />
+                {...register("companyId", { required: true })}
+            >
+                <option value="">Wybierz firmę</option>
+                
+            </select>
             <Input
                 id="role"
                 label="Rola użytkownika"
@@ -130,6 +112,26 @@ export const AddUserModal = () => {
             />
         </div>
     )
+
+    const { addUser } = useAddUser();
+
+    const onSubmit: SubmitHandler<AddUserRequest> = async (data) => {
+        setIsLoading(true);
+    
+        const newUserData = await addUser.mutateAsync(data, {
+            onSuccess: () => {
+                toast.success('Użytkownik dodany pomyślnie');
+                useModal.onClose(); // Call the onClose function
+                setIsLoading(false);
+    
+                queryClient.invalidateQueries(["firstName", "lastName", "email", "companyId", "role", "workStart", "position", "contract"]); // Pass an array of strings as the queryKey
+            },
+            onError: () => {
+                toast.error("Użytkownik nie został dodany");
+                setIsLoading(false);
+            }
+        });
+    }
 
     return (
         <Modal

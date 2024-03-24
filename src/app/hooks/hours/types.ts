@@ -1,14 +1,14 @@
 export interface Hours {
     id: string;
-    UserId: number;
-    hoursId: number;
+    UserId: string;
+    hoursId: string;
     startTime: string;
     endTime:   string;
     tasks:     string;
 }
 
 export interface TotalHours {
-    userId: number;
+    userId: string;
     firstName: string;
     lastName: string;
     totalHours: number;
