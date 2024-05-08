@@ -7,7 +7,8 @@ export interface AddUserRequest {
     companyId: string,
     role: string,
     contract: string,
-    workStart: string,
+    workStart: Date,
+    workYears: number,
     position: string,
 }
 
