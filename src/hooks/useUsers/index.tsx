@@ -6,19 +6,19 @@ import {
   useQueryClient,
   useSuspenseQuery
 } from '@tanstack/react-query';
- 
+
 import { usersQueryOptions } from './usersQueryOptions';
- 
+
 const useUsers = () => {
   const queryClient = useQueryClient();
- 
+
   const {
     data: users,
     refetch: usersRefetch,
     isLoading: usersLoading,
     isError: usersError
   } = useSuspenseQuery(usersQueryOptions);
- 
+
   const {
     mutateAsync: createUser,
     isPending: createUserPending,
@@ -30,17 +30,33 @@ const useUsers = () => {
         return res.data;
       })
   });
- 
+
+  const {
+    mutateAsync: editUser,
+    isPending: editUserPending,
+    isError: editUserError
+  } = useMutation({
+    mutationFn: (userData: UserRequest): Promise<UserRequest> =>
+      Axios.put(URLS.EDIT_USER(userData.id || ''), userData).then(res => {
+        queryClient.invalidateQueries({ queryKey: ['users'] });
+        return res.data;
+      })
+  });
+
   return {
     users,
     usersRefetch,
     usersLoading,
     usersError,
- 
+
     createUser,
     createUserPending,
-    createUserError
+    createUserError,
+
+    editUser,
+    editUserPending,
+    editUserError
   };
 };
- 
+
 export default useUsers;

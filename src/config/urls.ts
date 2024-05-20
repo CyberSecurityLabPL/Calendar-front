@@ -3,7 +3,10 @@ export const URLS = {
   REFRESH: () => '/auth/refresh',
 
   GET_COMPANIES: () => '/company/all',
+
   GET_USERS: () => '/users',
   CREATE_USER: () => '/users',
+  EDIT_USER: (id: string) => `/users/${id}`,
   ME: () => '/users/me'
+
 };
