@@ -13,8 +13,10 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as LoginImport } from './routes/login'
 import { Route as DashboardImport } from './routes/_dashboard'
+import { Route as DashboardUsersTableImport } from './routes/_dashboard/usersTable'
 import { Route as DashboardUsersImport } from './routes/_dashboard/users'
 import { Route as DashboardMeImport } from './routes/_dashboard/me'
+import { Route as DashboardUserFormImport } from './routes/_dashboard/UserForm'
 
 // Create/Update Routes
 
@@ -28,6 +30,11 @@ const DashboardRoute = DashboardImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const DashboardUsersTableRoute = DashboardUsersTableImport.update({
+  path: '/usersTable',
+  getParentRoute: () => DashboardRoute,
+} as any)
+
 const DashboardUsersRoute = DashboardUsersImport.update({
   path: '/users',
   getParentRoute: () => DashboardRoute,
@@ -35,6 +42,11 @@ const DashboardUsersRoute = DashboardUsersImport.update({
 
 const DashboardMeRoute = DashboardMeImport.update({
   path: '/me',
+  getParentRoute: () => DashboardRoute,
+} as any)
+
+const DashboardUserFormRoute = DashboardUserFormImport.update({
+  path: '/UserForm',
   getParentRoute: () => DashboardRoute,
 } as any)
 
@@ -50,6 +62,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
+    '/_dashboard/UserForm': {
+      preLoaderRoute: typeof DashboardUserFormImport
+      parentRoute: typeof DashboardImport
+    }
     '/_dashboard/me': {
       preLoaderRoute: typeof DashboardMeImport
       parentRoute: typeof DashboardImport
@@ -58,13 +74,22 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardUsersImport
       parentRoute: typeof DashboardImport
     }
+    '/_dashboard/usersTable': {
+      preLoaderRoute: typeof DashboardUsersTableImport
+      parentRoute: typeof DashboardImport
+    }
   }
 }
 
 // Create and export the route tree
 
 export const routeTree = rootRoute.addChildren([
-  DashboardRoute.addChildren([DashboardMeRoute, DashboardUsersRoute]),
+  DashboardRoute.addChildren([
+    DashboardUserFormRoute,
+    DashboardMeRoute,
+    DashboardUsersRoute,
+    DashboardUsersTableRoute,
+  ]),
   LoginRoute,
 ])
 

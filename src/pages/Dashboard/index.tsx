@@ -220,9 +220,9 @@ export function Dashboard() {
             Share
           </Button> */}
         </header>
-        <main className="grid flex-1 gap-4 overflow-auto p-4 md:grid-cols-2 lg:grid-cols-3">
+        <main className="grid flex-1 gap-4 overflow-auto p-4 md:grid-cols-2 lg:grid-cols-1">
           <div
-            className="relative flex-col items-start gap-8 md:flex"
+            className="relative flex-col items-start gap-8 md:flex w-full"
             x-chunk="dashboard-03-chunk-0">
             {/* This is the outlet component */}
             <Outlet />

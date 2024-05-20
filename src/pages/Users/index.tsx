@@ -2,7 +2,7 @@ import useUsers from '@/hooks/useUsers';
 
 const Users = () => {
   // Here we are using the hook 'useUsers' to fetch users from the backend. We are deconstructing the users element.
-  const { users } = useUsers();
+  const { users  } = useUsers();
   return (
     <>
       {/* Here we map over the users array to display all of the users. */}
