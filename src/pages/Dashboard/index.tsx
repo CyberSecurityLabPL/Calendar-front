@@ -23,7 +23,7 @@ import {
   TooltipContent,
   TooltipTrigger
 } from '@/components/ui/tooltip';
-import { Outlet } from '@tanstack/react-router';
+import { Link, Outlet } from '@tanstack/react-router';
 import {
   Bird,
   LifeBuoy,
@@ -31,7 +31,8 @@ import {
   Settings,
   SquareUser,
   Triangle,
-  Turtle
+  Turtle,
+  Users
 } from 'lucide-react';
 
 export function Dashboard() {
@@ -39,9 +40,11 @@ export function Dashboard() {
     <div className="grid h-screen w-full pl-[53px]">
       <aside className="inset-y fixed  left-0 z-20 flex h-full flex-col border-r">
         <div className="border-b p-2">
-          <Button variant="outline" size="icon" aria-label="Home">
-            <Triangle className="size-5 fill-foreground" />
-          </Button>
+          <Link to="/me">
+            <Button variant="outline" size="icon" aria-label="Home">
+              <Triangle className="size-5 fill-foreground" />
+            </Button>
+          </Link>
         </div>
         {/* <nav className="grid gap-1 p-2">
           <TooltipProvider>
@@ -58,6 +61,14 @@ export function Dashboard() {
             </Tooltip>
           </TooltipProvider>
         </nav> */}
+        <div className="flex items-start justify-center mt-4 ">
+          <Link to="/users">
+            <Button variant="outline" size="icon">
+              <Users className="size-6 " />
+            </Button>
+          </Link>
+        </div>
+
         <nav className="mt-auto grid gap-1 p-2">
           <TooltipProvider>
             <Tooltip>
@@ -220,9 +231,9 @@ export function Dashboard() {
             Share
           </Button> */}
         </header>
-        <main className="grid flex-1 gap-4 overflow-auto p-4 md:grid-cols-2 lg:grid-cols-3">
+        <main className="grid flex-1 gap-4 w-full p-4 lg:grid-cols-1">
           <div
-            className="relative flex-col items-start gap-8 md:flex"
+            className="relative flex-col items-start gap-8 md:flex w-full"
             x-chunk="dashboard-03-chunk-0">
             {/* This is the outlet component */}
             <Outlet />

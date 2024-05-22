@@ -1,21 +1,15 @@
 import useUsers from '@/hooks/useUsers';
 
-const Users = () => {
-  // Here we are using the hook 'useUsers' to fetch users from the backend. We are deconstructing the users element.
-  const { users } = useUsers();
-  return (
-    <>
-      {/* Here we map over the users array to display all of the users. */}
-      {users?.map(user => {
-        return (
-          <div key={user.id}>
-            <p>{user.firstName}</p>
-            <p>{user.email}</p>
-          </div>
-        );
-      })}
-    </>
-  );
-};
+import { DataTable } from './components/DataTable';
+import { columns } from './components/columns';
 
-export default Users;
+export default function Users() {
+  const { users } = useUsers();
+
+  if (!users) return <p>Brak użytkowników</p>;
+  return (
+    <div className="container w-full mx-auto py-10">
+      <DataTable columns={columns} data={users} />
+    </div>
+  );
+}
