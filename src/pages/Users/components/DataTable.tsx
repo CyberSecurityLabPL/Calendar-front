@@ -30,8 +30,8 @@ import {
 } from '@tanstack/react-table';
 import * as React from 'react';
 
-import userFieldNames from '../../types/User';
-import { UserForm } from '../UserForm';
+import userFieldNames from '../../../types/User';
+import { UserForm } from './UserForm';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

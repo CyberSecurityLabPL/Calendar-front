@@ -9,7 +9,7 @@ import UserOptions from './UserOptions';
 const roleTranslation = {
   [Role.ADMIN]: 'Administrator',
   [Role.USER]: 'Użytkownik',
-  [Role.MENAGER]: 'Menager'
+  [Role.MANAGER]: 'Manager'
 };
 
 const contractTranslation = {

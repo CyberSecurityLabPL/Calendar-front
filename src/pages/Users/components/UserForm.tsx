@@ -39,7 +39,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue
-} from '../../components/ui/select';
+} from '../../../components/ui/select';
 
 const formSchema = z.object({
   firstName: z.string().min(2, {
@@ -111,8 +111,7 @@ export function UserForm({ user, isOpen, onOpenChange }: UserFormProps) {
         })
         .catch(error => {
           console.error('Failed to add user:', error);
-          const errorMessage = 'Wystąpił błąd podczas dodawania użytkownika';
-          toast.error(errorMessage);
+          toast.error('Wystąpił błąd podczas dodawania użytkownika');
         });
     }
     onOpenChange(false);

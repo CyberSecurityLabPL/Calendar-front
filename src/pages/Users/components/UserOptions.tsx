@@ -12,7 +12,7 @@ import { MoreHorizontal } from 'lucide-react';
 import React from 'react';
 import { toast } from 'react-toastify';
 
-import { UserForm } from '../UserForm';
+import { UserForm } from './UserForm';
 
 interface UserOptionsProps {
   user: UserRole;
