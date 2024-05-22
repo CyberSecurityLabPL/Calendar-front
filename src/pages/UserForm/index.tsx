@@ -92,6 +92,7 @@ export function UserForm({ user, isOpen, onOpenChange }: UserFormProps) {
           position: '',
           contract: Contract.PRACA, // Default value
           companyId: '',
+          workYears: 0,
           workStart: new Date()
         }
   });
@@ -249,6 +250,7 @@ export function UserForm({ user, isOpen, onOpenChange }: UserFormProps) {
                       name="companyId"
                       render={({ field }) => (
                         <FormItem>
+                          <FormLabel>Firma</FormLabel>
                           <FormControl>
                             <Select
                               onValueChange={field.onChange}

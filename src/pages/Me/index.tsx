@@ -18,7 +18,7 @@ const Me = () => {
         Link to users
       </Link>
       <Link to="/usersTable">Link to users table</Link>
-    </>
+      </>
   );
 };
 

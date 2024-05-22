@@ -9,9 +9,6 @@ export enum Contract {
   ZLECENIE = 'UMOWA_ZLECENIE',
   PRACA = 'UMOWA_O_PRACE'
 }
-export enum CompanyId {
-  CSL = 'bce3d086-6433-4142-b39c-34b1eb14902f'
-}
 
 export interface User {
   id: string;
@@ -29,3 +26,21 @@ export interface UserRequest extends Omit<User, 'companyDto' | 'id'> {
   id?: string;
   companyId: string;
 }
+interface UserFieldNames {
+  [key: string]: string;
+}
+
+const userFieldNames: UserFieldNames = {
+  id: 'ID',
+  firstName: 'Imię',
+  lastName: 'Nazwisko',
+  workYears: 'Lata pracy',
+  email: 'Email',
+  contract: 'Umowa',
+  position: 'Stanowisko',
+  companyDto: 'Firma',
+  workStart: 'Data rozpoczęcia',
+  role: 'Rola'
+};
+
+export default userFieldNames;

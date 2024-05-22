@@ -43,6 +43,19 @@ const useUsers = () => {
       })
   });
 
+  const {
+    mutateAsync: deleteUser,
+    isPending: deleteUserPending,
+    isError: deleteUserError
+     } = useMutation({
+    mutationFn: (userData: UserRequest): Promise<UserRequest> =>
+      Axios.delete(URLS.DELETE_USER(userData.id || '')).then(res => {
+        queryClient.invalidateQueries({ queryKey: ['users'] });
+        return res.data;
+      })
+  });
+
+
   return {
     users,
     usersRefetch,
@@ -55,7 +68,11 @@ const useUsers = () => {
 
     editUser,
     editUserPending,
-    editUserError
+    editUserError,
+
+    deleteUser,
+    deleteUserPending,
+    deleteUserError
   };
 };
 

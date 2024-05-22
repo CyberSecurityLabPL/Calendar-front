@@ -6,19 +6,39 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
+import useUsers from '@/hooks/useUsers';
+import { Contract, Role, User } from '@/types/User';
 import { MoreHorizontal } from 'lucide-react';
 import React from 'react';
 
 import { UserForm } from '../UserForm';
-import { User } from '@/types/User';
 
 interface UserOptionsProps {
-    user: User;
-    }
+  user: User;
+}
 
-const UserOptions = ({user}: UserOptionsProps )=> {
+const UserOptions = ({ user }: UserOptionsProps) => {
   const [isEditModalOpen, setEditModalOpen] = React.useState(false);
+  const { deleteUser, deleteUserPending } = useUsers();
 
+  const handleDeleteUser = async () => {
+    try {
+      await deleteUser({
+        id: user.id,
+        companyId: '',
+        firstName: '',
+        lastName: '',
+        workYears: 0,
+        email: '',
+        contract: Contract.ZLECENIE,
+        position: '',
+        workStart: new Date(),
+        role: Role.ADMIN
+      });
+    } catch (error) {
+      console.error('Failed to delete user:', error);
+    }
+  };
 
   return (
     <DropdownMenu>
@@ -33,7 +53,12 @@ const UserOptions = ({user}: UserOptionsProps )=> {
           Edytuj dane
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Usuń użytkownika</DropdownMenuItem>
+        <DropdownMenuItem className="text-red-800"
+          onClick={handleDeleteUser}
+          disabled={deleteUserPending}>
+          {' '}
+          Usuń użytkownika
+        </DropdownMenuItem>
       </DropdownMenuContent>
       <UserForm
         user={user}
@@ -43,6 +68,5 @@ const UserOptions = ({user}: UserOptionsProps )=> {
     </DropdownMenu>
   );
 };
-
 
 export default UserOptions;

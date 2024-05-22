@@ -1,19 +1,9 @@
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu';
 import { Contract, Role, User } from '@/types/User';
 import { ColumnDef } from '@tanstack/react-table';
-import { MoreHorizontal } from 'lucide-react';
 import { ArrowUpDown } from 'lucide-react';
 
-import { UserForm } from '../UserForm';
 import UserOptions from './UserOptions';
 
 const rolTranslation = {
@@ -26,7 +16,18 @@ const conTranslation = {
   [Contract.ZLECENIE]: 'Umowa zlecenie',
   [Contract.PRACA]: 'Umowa o pracę'
 };
-
+const userFieldNames = {
+  id: "ID",
+  firstName: "Imię",
+  lastName: "Nazwisko",
+  workYears: "Lata pracy",
+  email: "Email",
+  contract: "Umowa",
+  position: "Stanowisko",
+  companyDto: "Firma",
+  workStart: "Data rozpoczęcia",
+  role: "Rola"
+};
 export const columns: ColumnDef<User>[] = [
   {
     id: 'select',
@@ -65,33 +66,29 @@ export const columns: ColumnDef<User>[] = [
   },
   {
     accessorKey: 'firstName',
-    header: () => <div className="text-right">Imię</div>
+    header: () => <div className="text-right">{userFieldNames.firstName}</div>
   },
   {
     accessorKey: 'lastName',
-    header: () => <div className="text-right">Nazwisko</div>
-  },
-  {
-    accessorKey: 'email',
-    header: () => <div className="text-right">e-mail</div>
+    header: () => <div className="text-right">{userFieldNames.lastName}</div>
   },
   {
     accessorKey: 'role',
-    header: () => <div className="text-right">Funkcja</div>,
+    header: () => <div className="text-right">{userFieldNames.role}</div>,
     cell: ({ row }) => <p>{rolTranslation[row.original.role]}</p>
   },
   {
     accessorKey: 'contract',
-    header: () => <div className="text-right">Rodzaj umowy</div>,
+    header: () => <div className="text-right">{userFieldNames.contract}</div>,
     cell: ({ row }) => <p>{conTranslation[row.original.contract]}</p>
   },
   {
     accessorKey: 'position',
-    header: () => <div className="text-right">Stanowisko</div>
+    header: () => <div className="text-right">{userFieldNames.position}</div>
   },
 
   {
-    id: 'actions',
+    id: 'akcje',
     cell: ({ row }) => {
       const user = row.original;
 
@@ -100,3 +97,4 @@ export const columns: ColumnDef<User>[] = [
   }
   // ...
 ];
+export default userFieldNames;

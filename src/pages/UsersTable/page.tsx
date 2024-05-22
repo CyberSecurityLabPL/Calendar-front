@@ -11,7 +11,7 @@ export default function DemoPage() {
     if (!users)
         return <p>Brak użytkowników</p>;
     return (
-        <div className="container w-full mx-auto py-10">
+        <div className="container w-fit mx-auto py-10">
             <DataTable columns={columns} data={users} />
         </div>
     )
