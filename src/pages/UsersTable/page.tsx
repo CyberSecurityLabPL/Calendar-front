@@ -3,7 +3,7 @@ import useUsers from '@/hooks/useUsers';
 import { columns } from './columns';
 import { DataTable } from './dataTable';
 
-export default function DemoPage() {
+export default function TableComponent() {
   const { users } = useUsers();
 
   if (!users) return <p>Brak użytkowników</p>;

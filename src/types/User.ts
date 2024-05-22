@@ -3,7 +3,7 @@ import { CompanyDto } from './Company';
 export enum Role {
   ADMIN = 'ROLE_ADMIN',
   USER = 'ROLE_USER',
-  MENAGER = 'ROLE_MENAGER'
+  MANAGER = 'ROLE_MANAGER'
 }
 export enum Contract {
   ZLECENIE = 'UMOWA_ZLECENIE',

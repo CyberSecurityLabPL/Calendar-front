@@ -8,8 +8,7 @@ import {
   DialogContent,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
-  DialogTrigger
+  DialogTitle
 } from '@/components/ui/dialog';
 import {
   Form,
@@ -27,11 +26,9 @@ import {
 } from '@/components/ui/popover';
 import useCompanies from '@/hooks/useCompanies';
 import useUsers from '@/hooks/useUsers';
-import { CompanyDto } from '@/types/Company';
 import { Contract, Role, UserRole, UserRequest } from '@/types/User';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useQueryClient } from '@tanstack/react-query';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
@@ -76,7 +73,6 @@ interface UserFormProps {
 }
 
 export function UserForm({ user, isOpen, onOpenChange }: UserFormProps) {
-  const queryClient = useQueryClient();
   const form = useForm<UserRequest>({
     resolver: zodResolver(formSchema),
     defaultValues: user
@@ -105,7 +101,6 @@ export function UserForm({ user, isOpen, onOpenChange }: UserFormProps) {
     // Assuming workStart is a date string
     console.log(data);
     data.workStart = workStart;
-    const workYears = new Date().getFullYear() - workStart.getFullYear();
 
     if (user) {
       editUser(data).then(() => toast.success('Pomyślnie zedytowano dane!'));
@@ -116,7 +111,7 @@ export function UserForm({ user, isOpen, onOpenChange }: UserFormProps) {
         })
         .catch(error => {
           console.error('Failed to add user:', error);
-          let errorMessage = 'Wystąpił błąd podczas dodawania użytkownika';
+          const errorMessage = 'Wystąpił błąd podczas dodawania użytkownika';
           toast.error(errorMessage);
         });
     }
@@ -237,7 +232,7 @@ export function UserForm({ user, isOpen, onOpenChange }: UserFormProps) {
                                   Użytkownik
                                 </SelectItem>
                                 <SelectItem value="ROLE_MANAGER">
-                                  Menager
+                                  Manager
                                 </SelectItem>
                                 <SelectItem value="ROLE_ADMIN">
                                   Administracja

@@ -34,7 +34,6 @@ import {
   Turtle,
   Users
 } from 'lucide-react';
-import { useState } from 'react';
 
 export function Dashboard() {
   return (
