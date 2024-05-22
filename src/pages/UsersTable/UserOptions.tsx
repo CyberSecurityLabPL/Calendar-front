@@ -7,14 +7,15 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import useUsers from '@/hooks/useUsers';
-import { Contract, Role, User } from '@/types/User';
+import { UserRole } from '@/types/User';
 import { MoreHorizontal } from 'lucide-react';
 import React from 'react';
+import { toast } from 'react-toastify';
 
 import { UserForm } from '../UserForm';
 
 interface UserOptionsProps {
-  user: User;
+  user: UserRole;
 }
 
 const UserOptions = ({ user }: UserOptionsProps) => {
@@ -22,22 +23,18 @@ const UserOptions = ({ user }: UserOptionsProps) => {
   const { deleteUser, deleteUserPending } = useUsers();
 
   const handleDeleteUser = async () => {
-    try {
-      await deleteUser({
-        id: user.id,
-        companyId: '',
-        firstName: '',
-        lastName: '',
-        workYears: 0,
-        email: '',
-        contract: Contract.ZLECENIE,
-        position: '',
-        workStart: new Date(),
-        role: Role.ADMIN
+    deleteUser(user.id)
+      .then(() => {
+        toast.success('Pomyślnie usunięto użytkownika!');
+      })
+      .catch(error => {
+        console.error('Failed to delete user:', error);
+        let errorMessage = 'Wystąpił błąd podczas usuwania użytkownika';
+        if (error?.data?.message === "You can't delete admin account") {
+          errorMessage = 'Nie możesz usunąć administratora';
+        }
+        toast.error(errorMessage);
       });
-    } catch (error) {
-      console.error('Failed to delete user:', error);
-    }
   };
 
   return (
@@ -53,7 +50,8 @@ const UserOptions = ({ user }: UserOptionsProps) => {
           Edytuj dane
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="text-red-800"
+        <DropdownMenuItem
+          className="text-red-800"
           onClick={handleDeleteUser}
           disabled={deleteUserPending}>
           {' '}

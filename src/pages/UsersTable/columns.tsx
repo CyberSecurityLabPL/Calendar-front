@@ -1,34 +1,23 @@
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Contract, Role, User } from '@/types/User';
+import userFieldNames, { Contract, Role, UserRole } from '@/types/User';
 import { ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown } from 'lucide-react';
 
 import UserOptions from './UserOptions';
 
-const rolTranslation = {
+const roleTranslation = {
   [Role.ADMIN]: 'Administrator',
   [Role.USER]: 'Użytkownik',
   [Role.MENAGER]: 'Menager'
 };
 
-const conTranslation = {
+const contractTranslation = {
   [Contract.ZLECENIE]: 'Umowa zlecenie',
   [Contract.PRACA]: 'Umowa o pracę'
 };
-const userFieldNames = {
-  id: "ID",
-  firstName: "Imię",
-  lastName: "Nazwisko",
-  workYears: "Lata pracy",
-  email: "Email",
-  contract: "Umowa",
-  position: "Stanowisko",
-  companyDto: "Firma",
-  workStart: "Data rozpoczęcia",
-  role: "Rola"
-};
-export const columns: ColumnDef<User>[] = [
+
+export const columns: ColumnDef<UserRole>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -75,12 +64,12 @@ export const columns: ColumnDef<User>[] = [
   {
     accessorKey: 'role',
     header: () => <div className="text-right">{userFieldNames.role}</div>,
-    cell: ({ row }) => <p>{rolTranslation[row.original.role]}</p>
+    cell: ({ row }) => <p>{roleTranslation[row.original.role]}</p>
   },
   {
     accessorKey: 'contract',
     header: () => <div className="text-right">{userFieldNames.contract}</div>,
-    cell: ({ row }) => <p>{conTranslation[row.original.contract]}</p>
+    cell: ({ row }) => <p>{contractTranslation[row.original.contract]}</p>
   },
   {
     accessorKey: 'position',

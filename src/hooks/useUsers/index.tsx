@@ -47,14 +47,13 @@ const useUsers = () => {
     mutateAsync: deleteUser,
     isPending: deleteUserPending,
     isError: deleteUserError
-     } = useMutation({
-    mutationFn: (userData: UserRequest): Promise<UserRequest> =>
-      Axios.delete(URLS.DELETE_USER(userData.id || '')).then(res => {
+  } = useMutation({
+    mutationFn: (id: string): Promise<void> =>
+      Axios.delete(URLS.DELETE_USER(id || '')).then(res => {
         queryClient.invalidateQueries({ queryKey: ['users'] });
         return res.data;
       })
   });
-
 
   return {
     users,

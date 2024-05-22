@@ -13,7 +13,6 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as LoginImport } from './routes/login'
 import { Route as DashboardImport } from './routes/_dashboard'
-import { Route as DashboardUsersTableImport } from './routes/_dashboard/usersTable'
 import { Route as DashboardUsersImport } from './routes/_dashboard/users'
 import { Route as DashboardMeImport } from './routes/_dashboard/me'
 import { Route as DashboardUserFormImport } from './routes/_dashboard/UserForm'
@@ -28,11 +27,6 @@ const LoginRoute = LoginImport.update({
 const DashboardRoute = DashboardImport.update({
   id: '/_dashboard',
   getParentRoute: () => rootRoute,
-} as any)
-
-const DashboardUsersTableRoute = DashboardUsersTableImport.update({
-  path: '/usersTable',
-  getParentRoute: () => DashboardRoute,
 } as any)
 
 const DashboardUsersRoute = DashboardUsersImport.update({
@@ -74,10 +68,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardUsersImport
       parentRoute: typeof DashboardImport
     }
-    '/_dashboard/usersTable': {
-      preLoaderRoute: typeof DashboardUsersTableImport
-      parentRoute: typeof DashboardImport
-    }
   }
 }
 
@@ -88,7 +78,6 @@ export const routeTree = rootRoute.addChildren([
     DashboardUserFormRoute,
     DashboardMeRoute,
     DashboardUsersRoute,
-    DashboardUsersTableRoute,
   ]),
   LoginRoute,
 ])

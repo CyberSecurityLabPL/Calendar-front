@@ -12,13 +12,8 @@ const Me = () => {
         Notice how when you hover over this button you can see in your browser devtools that the data prefetches. 
         That's because we've defined a loader in the '/users' route!
       */}
-      <Link
-        to="/users"
-        className="flex items-center gap-2 p-2 rounded-md hover:bg-muted/20">
-        Link to users
-      </Link>
-      <Link to="/usersTable">Link to users table</Link>
-      </>
+      <Link to="/users">Link to users table</Link>
+    </>
   );
 };
 

@@ -28,7 +28,7 @@ import {
 import useCompanies from '@/hooks/useCompanies';
 import useUsers from '@/hooks/useUsers';
 import { CompanyDto } from '@/types/Company';
-import { Contract, Role, User, UserRequest } from '@/types/User';
+import { Contract, Role, UserRole, UserRequest } from '@/types/User';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
 import React, { useEffect } from 'react';
@@ -46,31 +46,31 @@ import {
 
 const formSchema = z.object({
   firstName: z.string().min(2, {
-    message: 'First name must be at least 2 characters.'
+    message: 'Imię musi mieć co najmniej 2 litery.'
   }),
   lastName: z.string().min(2, {
-    message: 'Last name must be at least 2 characters.'
+    message: 'Nazwisko musi mieć co najmniej 2 litery.'
   }),
   email: z.string().email({
-    message: 'Invalid email address.'
+    message: 'Nieprawidłowy adres e-mail.'
   }),
   position: z.string().min(2, {
-    message: 'Position must be at least 2 characters.'
+    message: 'Stanowisko musi mieć co najmniej 2 litery.'
   }),
   role: z.enum(['ROLE_USER', 'ROLE_MANAGER', 'ROLE_ADMIN'], {
-    errorMap: () => ({ message: 'Invalid role.' })
+    errorMap: () => ({ message: 'Niewłaściwa rola.' })
   }),
   contract: z.enum(['UMOWA_ZLECENIE', 'UMOWA_O_PRACE'], {
-    errorMap: () => ({ message: 'Invalid contract type.' })
+    errorMap: () => ({ message: 'Niewłaściwy rodzaj umowy.' })
   }),
   companyId: z.string(),
   workStart: z.date({
-    required_error: 'Work start date is required.'
+    required_error: 'Data rozpoczęcia pracy jest wymagana.'
   })
 });
 
 interface UserFormProps {
-  user?: User;
+  user?: UserRole;
   isOpen: boolean;
   onOpenChange(open: boolean): void;
 }
@@ -78,12 +78,12 @@ interface UserFormProps {
 export function UserForm({ user, isOpen, onOpenChange }: UserFormProps) {
   const queryClient = useQueryClient();
   const form = useForm<UserRequest>({
-    //resolver: zodResolver(formSchema),
+    resolver: zodResolver(formSchema),
     defaultValues: user
       ? {
-        companyId: user.companyDto.id,
-        ...user
-      }
+          companyId: user.companyDto.id,
+          ...user
+        }
       : {
           firstName: '',
           lastName: '',
@@ -110,9 +110,15 @@ export function UserForm({ user, isOpen, onOpenChange }: UserFormProps) {
     if (user) {
       editUser(data).then(() => toast.success('Pomyślnie zedytowano dane!'));
     } else {
-      createUser(data).then(() => {
-        toast.success('Pomyślnie dodano!');
-      });
+      createUser(data)
+        .then(() => {
+          toast.success('Pomyślnie dodano!');
+        })
+        .catch(error => {
+          console.error('Failed to add user:', error);
+          let errorMessage = 'Wystąpił błąd podczas dodawania użytkownika';
+          toast.error(errorMessage);
+        });
     }
     onOpenChange(false);
   };
@@ -186,7 +192,6 @@ export function UserForm({ user, isOpen, onOpenChange }: UserFormProps) {
                         </FormItem>
                       )}
                     />
-
                     <FormField
                       control={form.control}
                       name="contract"
@@ -214,7 +219,6 @@ export function UserForm({ user, isOpen, onOpenChange }: UserFormProps) {
                         </FormItem>
                       )}
                     />
-
                     <FormField
                       control={form.control}
                       name="role"
@@ -291,7 +295,7 @@ export function UserForm({ user, isOpen, onOpenChange }: UserFormProps) {
                           <FormLabel>Data rozpoczęcia pracy</FormLabel>
                           <Popover>
                             <PopoverTrigger asChild>
-                              <Button variant="outline">
+                              <Button variant="outline" className="w-full">
                                 {workStart
                                   ? workStart.toLocaleDateString()
                                   : 'Wybierz datę'}
@@ -313,10 +317,21 @@ export function UserForm({ user, isOpen, onOpenChange }: UserFormProps) {
                         </FormItem>
                       )}
                     />
-                    <div className="col-span-1 md:col-span-2  p-2">
-                      <Button type="submit" className="w-full">
-                        Zapisz
-                      </Button>
+                    <div className="col-span-1 md:col-span-2  p-1">
+                      <DialogFooter className="sm:justify-end">
+                        <DialogClose asChild>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            className="w-1/2">
+                            Close
+                          </Button>
+                        </DialogClose>
+
+                        <Button type="submit" className="w-1/2">
+                          Zapisz
+                        </Button>
+                      </DialogFooter>
                     </div>
                   </form>
                 </Form>
@@ -324,13 +339,6 @@ export function UserForm({ user, isOpen, onOpenChange }: UserFormProps) {
             </div>
           </div>
         </div>
-        <DialogFooter className="sm:justify-end">
-          <DialogClose asChild>
-            <Button type="button" variant="outline">
-              Close
-            </Button>
-          </DialogClose>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
