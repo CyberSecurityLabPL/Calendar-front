@@ -318,7 +318,7 @@ export function UserForm({ user, isOpen, onOpenChange }: UserFormProps) {
                             type="button"
                             variant="outline"
                             className="w-1/2">
-                            Close
+                            Zamknij
                           </Button>
                         </DialogClose>
 
