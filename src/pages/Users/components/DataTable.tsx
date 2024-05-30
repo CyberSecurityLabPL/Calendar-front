@@ -30,23 +30,25 @@ import {
 } from '@tanstack/react-table';
 import * as React from 'react';
 
-import userFieldNames from '../../../types/User';
-import { UserForm } from './UserForm';
-
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  filterPlaceholder?: string;
+  noResultsMessage?: string;
+  searchColumnKey?: string;
 }
 
 export function DataTable<TData, TValue>({
   columns,
-  data
+  data,
+  filterPlaceholder = 'Wyszukaj...',
+  noResultsMessage = 'Brak wyników.',
+  searchColumnKey
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
-  const [isAddUserDialogOpen, setAddUserDialogOpen] = React.useState(false);
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
@@ -71,15 +73,22 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4 g-4">
-        <Input
-          placeholder="Wyszukaj e-mail..."
-          value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
-          onChange={event =>
-            table.getColumn('email')?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm mr-4"
-        />
+      <div className="flex items-center py-4 gap-4">
+        {searchColumnKey && (
+          <Input
+            placeholder={filterPlaceholder}
+            value={
+              (table.getColumn(searchColumnKey)?.getFilterValue() as string) ??
+              ''
+            }
+            onChange={event =>
+              table
+                .getColumn(searchColumnKey)
+                ?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm mr-4"
+          />
+        )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="mr-4">
@@ -90,40 +99,33 @@ export function DataTable<TData, TValue>({
             {table
               .getAllColumns()
               .filter(column => column.getCanHide())
-              .map(column => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={value => column.toggleVisibility(!!value)}>
-                    {userFieldNames[column.id] || column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
+              .map(column => (
+                <DropdownMenuCheckboxItem
+                  key={column.id}
+                  className="capitalize"
+                  checked={column.getIsVisible()}
+                  onCheckedChange={value => column.toggleVisibility(!!value)}>
+                  {column.id}
+                </DropdownMenuCheckboxItem>
+              ))}
           </DropdownMenuContent>
         </DropdownMenu>
-        <Button onClick={() => setAddUserDialogOpen(true)} variant="outline">
-          Dodaj użytkownika
-        </Button>
       </div>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map(headerGroup => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map(header => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
+                {headerGroup.headers.map(header => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
           </TableHeader>
@@ -148,7 +150,7 @@ export function DataTable<TData, TValue>({
                 <TableCell
                   colSpan={columns.length}
                   className="h-24 text-center">
-                  Brak wyników.
+                  {noResultsMessage}
                 </TableCell>
               </TableRow>
             )}
@@ -171,10 +173,6 @@ export function DataTable<TData, TValue>({
           Następna
         </Button>
       </div>
-      <UserForm
-        isOpen={isAddUserDialogOpen}
-        onOpenChange={() => setAddUserDialogOpen(!isAddUserDialogOpen)}
-      />
     </div>
   );
 }

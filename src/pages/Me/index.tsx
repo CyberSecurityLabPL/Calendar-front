@@ -14,6 +14,7 @@ const Me = () => {
       */}
       <Link to="/users">Link to users table</Link>
       <Link to="/calendar">Link to calendar</Link>
+      <Link to="/hoursTable">Link to hours</Link>
     </>
   );
 };

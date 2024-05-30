@@ -1,28 +1,91 @@
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
+import useHours from '@/hooks/useHours';
+import { Hours, HoursRequest } from '@/types/Hours';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import { Dialog } from '@hilla/react-components/Dialog.js';
-import { TimePicker } from '@hilla/react-components/TimePicker.js';
-import { VerticalLayout } from '@hilla/react-components/VerticalLayout.js';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
-function Calendar() {
-  const [isDialogOpen, setDialogOpened] = useState(false);
+import DialogForm from './DialogForm';
+
+interface CalendarProps {
+  hours?: Hours;
+}
+
+export function Calendar({ hours }: CalendarProps) {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [isDialogOpen, setDialogOpened] = useState(false);
+  const { handleSubmit, reset, setValue, register } = useForm<HoursRequest>({
+    defaultValues: {
+      startTime: new Date(),
+      endTime: new Date(),
+      tasks: ''
+    }
+  });
+
+  const { addHours } = useHours(); // Add the addHours function from your hook
+
   const [workStart, setWorkStart] = useState<string>('08:00');
   const [workEnd, setWorkEnd] = useState<string>('16:00');
+  const [tasks, setTasks] = useState<string>('');
+
+  useEffect(() => {
+    if (hours) {
+      const start = new Date(hours.startTime);
+      const end = new Date(hours.endTime);
+      setWorkStart(start.toISOString().substr(11, 5)); // 'HH:MM'
+      setWorkEnd(end.toISOString().substr(11, 5)); // 'HH:MM'
+      setTasks(hours.tasks);
+      setValue('startTime', start);
+      setValue('endTime', end);
+      setValue('tasks', hours.tasks);
+    }
+  }, [hours, setValue]);
 
   const handleDateClick = (info: any) => {
     setSelectedDate(info.dateStr);
     setDialogOpened(true);
   };
 
+  const onSubmit = async (data: HoursRequest) => {
+    if (!selectedDate) {
+      toast.error('Data nie została wybrana');
+      return;
+    }
+
+    const createDate = (date: string, time: string) => {
+      const [hours, minutes] = time.split(':');
+      const dateObj = new Date(`${date}T${hours}:${minutes}:00`);
+      dateObj.setHours(dateObj.getHours() + 2);
+      return new Date(dateObj);
+    };
+
+    const startDate = createDate(selectedDate, workStart);
+    const endDate = createDate(selectedDate, workEnd);
+
+    const requestData: HoursRequest = {
+      ...data,
+      startTime: startDate,
+      endTime: endDate,
+      tasks: tasks
+    };
+
+    try {
+      await addHours(requestData);
+      toast.success('Pomyślnie dodano!');
+      setDialogOpened(false);
+      reset();
+    } catch (error) {
+      toast.error('Wystąpił błąd podczas dodawania godzin');
+      console.error(error);
+    }
+  };
+
   return (
     <>
-      <div>
+      <div className="w-1/2">
         <FullCalendar
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           selectable={true}
@@ -36,45 +99,22 @@ function Calendar() {
           dateClick={handleDateClick}
         />
       </div>
-
-      <Dialog
-        opened={isDialogOpen}
-        onOpenedChanged={({ detail }) => {
-          setDialogOpened(detail.value);
-        }}
-        footerRenderer={() => (
-          <>
-            <button style={{ display: 'none' }}></button>
-          </>
-        )}>
-        <div className="text-center text-xl">{selectedDate}</div>
-        <VerticalLayout className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right col-span-2 ">
-              Godzina rozpoczęcia pracy
-            </Label>
-            <div className="col-span-2">
-              <TimePicker onInput={() => setWorkStart} value={workStart} />
-            </div>
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right col-span-2 ">
-              Godzina zakończenia pracy
-            </Label>
-            <div className="col-span-2">
-              <TimePicker onInput={() => setWorkEnd} value={workEnd} />
-            </div>
-          </div>
-          <div className="flex w-full basis-1/2 gap-4 mt-4">
-            <Button className="basis-1/2" type="button" variant="outline">
-              Wyjdź
-            </Button>
-            <Button className="basis-1/2" type="submit">
-              Zapisz
-            </Button>
-          </div>
-        </VerticalLayout>
-      </Dialog>
+      <DialogForm
+        isDialogOpen={isDialogOpen}
+        setDialogOpened={setDialogOpened}
+        selectedDate={selectedDate}
+        workStart={workStart}
+        setWorkStart={setWorkStart}
+        workEnd={workEnd}
+        setWorkEnd={setWorkEnd}
+        tasks={tasks}
+        setTasks={setTasks}
+        hours={hours}
+        reset={reset}
+        setValue={setValue}
+        handleSubmit={handleSubmit(onSubmit)}
+        register={register}
+      />
     </>
   );
 }

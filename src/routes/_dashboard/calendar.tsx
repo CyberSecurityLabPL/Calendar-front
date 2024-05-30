@@ -1,6 +1,6 @@
-import CalendarPage from '@/pages/Calendar';
+import Calendar from '@/pages/Calendar';
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_dashboard/calendar')({
-  component: CalendarPage
+  component: Calendar
 });

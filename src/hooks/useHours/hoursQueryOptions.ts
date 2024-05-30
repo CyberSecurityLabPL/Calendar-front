@@ -1,12 +1,12 @@
 import { URLS } from '@/config/urls';
-import { UserRole } from '@/types/User';
+import { Hours } from '@/types/Hours';
 import { Axios } from '@/utils/Axios';
 import { queryOptions } from '@tanstack/react-query';
 
-export const usersQueryOptions = queryOptions({
-  queryKey: ['users'],
+export const hoursQueryOptions = queryOptions({
+  queryKey: ['hours'],
   queryFn: async () =>
-    Axios.get<UserRole[]>(URLS.GET_USERS())
+    Axios.get<Hours[]>(URLS.GET_HOURS())
       .then(res => res.data)
       .catch(err => {
         console.error(err);

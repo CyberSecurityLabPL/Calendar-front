@@ -15,6 +15,7 @@ import { Route as LoginImport } from './routes/login'
 import { Route as DashboardImport } from './routes/_dashboard'
 import { Route as DashboardUsersImport } from './routes/_dashboard/users'
 import { Route as DashboardMeImport } from './routes/_dashboard/me'
+import { Route as DashboardHoursTableImport } from './routes/_dashboard/hoursTable'
 import { Route as DashboardCalendarImport } from './routes/_dashboard/calendar'
 
 // Create/Update Routes
@@ -39,6 +40,11 @@ const DashboardMeRoute = DashboardMeImport.update({
   getParentRoute: () => DashboardRoute,
 } as any)
 
+const DashboardHoursTableRoute = DashboardHoursTableImport.update({
+  path: '/hoursTable',
+  getParentRoute: () => DashboardRoute,
+} as any)
+
 const DashboardCalendarRoute = DashboardCalendarImport.update({
   path: '/calendar',
   getParentRoute: () => DashboardRoute,
@@ -60,6 +66,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardCalendarImport
       parentRoute: typeof DashboardImport
     }
+    '/_dashboard/hoursTable': {
+      preLoaderRoute: typeof DashboardHoursTableImport
+      parentRoute: typeof DashboardImport
+    }
     '/_dashboard/me': {
       preLoaderRoute: typeof DashboardMeImport
       parentRoute: typeof DashboardImport
@@ -76,6 +86,7 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   DashboardRoute.addChildren([
     DashboardCalendarRoute,
+    DashboardHoursTableRoute,
     DashboardMeRoute,
     DashboardUsersRoute,
   ]),
