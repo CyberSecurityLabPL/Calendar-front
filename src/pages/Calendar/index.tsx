@@ -67,8 +67,8 @@ export function Calendar({ hours }: CalendarProps) {
 
     const requestData: HoursRequest = {
       ...data,
-      startTime: startDate,
-      endTime: endDate,
+      startTime: new Date(startDate),
+      endTime: new Date(endDate),
       tasks: tasks
     };
 

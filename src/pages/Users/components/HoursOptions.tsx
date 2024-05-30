@@ -79,8 +79,8 @@ const HoursOptions = ({ hours }: HoursOptionsProps) => {
 
     const requestData: HoursRequest = {
       ...data,
-      startTime: startDate,
-      endTime: endDate,
+      startTime: new Date(startDate),
+      endTime: new Date(endDate),
       tasks: tasks
     };
 

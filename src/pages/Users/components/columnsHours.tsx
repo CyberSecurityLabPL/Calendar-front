@@ -45,7 +45,7 @@ export const columns: ColumnDef<Hours>[] = [
     accessorKey: 'startTime',
     header: () => <div className="text-left">Początek pracy</div>,
     cell: ({ row }) => {
-      const date = timestampToDate(row.original.startTime);
+      const date = new Date(row.original.startTime);
       return `${getHours(date)}:${getMinutes(date).toString().padStart(2, '0')}`;
     }
   },
@@ -53,7 +53,7 @@ export const columns: ColumnDef<Hours>[] = [
     accessorKey: 'endTime',
     header: () => <div className="text-left">Koniec pracy</div>,
     cell: ({ row }) => {
-      const date = timestampToDate(row.original.endTime);
+      const date = new Date(row.original.endTime);
       return `${getHours(date)}:${getMinutes(date).toString().padStart(2, '0')}`;
     }
   },

@@ -1,7 +1,7 @@
 import useHours from '@/hooks/useHours';
 
-import { DataTable } from './DataTable';
-import { columns } from './columnsHours';
+import { DataTable } from './components/DataTable';
+import { columns } from './components/columnsHours';
 
 export default function hoursTable() {
   const { hours } = useHours();
