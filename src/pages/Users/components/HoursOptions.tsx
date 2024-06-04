@@ -11,8 +11,8 @@ import DialogForm from '@/pages/Calendar/DialogForm';
 import { Hours } from '@/types/Hours';
 import { HoursRequest } from '@/types/Hours';
 import { MoreHorizontal } from 'lucide-react';
-import React, { useState, useEffect } from 'react';
-import { useForm, UseFormSetValue } from 'react-hook-form';
+import { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 interface HoursOptionsProps {
@@ -39,14 +39,15 @@ const HoursOptions = ({ hours }: HoursOptionsProps) => {
     if (hours) {
       const start = new Date(hours.startTime);
       const end = new Date(hours.endTime);
-      setSelectedDate(start.toISOString().substr(0, 10)); // 'YYYY-MM-DD'
-      setWorkStart(start.toISOString().substr(11, 5)); // 'HH:MM'
-      setWorkEnd(end.toISOString().substr(11, 5)); // 'HH:MM'
+      start.setHours(start.getHours() + 2);
+      end.setHours(end.getHours() + 2);
+      setSelectedDate(start.toISOString().substr(0, 10));
+      setWorkStart(start.toISOString().substr(11, 5));
+      setWorkEnd(end.toISOString().substr(11, 5));
       setTasks(hours.tasks);
       setValue('startTime', start);
       setValue('endTime', end);
       setValue('tasks', hours.tasks);
-      console.log(hours);
     }
   }, [hours, setValue]);
 
@@ -97,7 +98,6 @@ const HoursOptions = ({ hours }: HoursOptionsProps) => {
       toast.error('Wystąpił błąd podczas dodawania godzin pracy');
     } finally {
       setDialogOpened(false);
-      reset();
     }
   });
 
@@ -138,6 +138,8 @@ const HoursOptions = ({ hours }: HoursOptionsProps) => {
         setValue={setValue}
         handleSubmit={handleEditHours}
         register={register}
+        handleDeleteHours={handleDeleteHours}
+        editingEventId={null}
       />
     </>
   );

@@ -1,8 +1,14 @@
+import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger
+} from '@/components/ui/hover-card';
 import hoursFieldNames, { Hours } from '@/types/Hours';
-import { timestampToDate } from '@/utils/Date';
 import { ColumnDef } from '@tanstack/react-table';
 import { getHours, getMinutes } from 'date-fns';
+import { ArrowUpDown, Info } from 'lucide-react';
 
 import HoursOptions from './HoursOptions';
 
@@ -30,8 +36,15 @@ export const columns: ColumnDef<Hours>[] = [
     enableHiding: false
   },
   {
-    accessorKey: 'selectedDate',
-    header: () => <div className="text-left">Data pracy</div>,
+    accessorKey: 'startTime',
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+        <div className="text-left">Data pracy</div>
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
     cell: ({ row }) => {
       const date = new Date(row.original.startTime);
       const day = date.getDate().toString().padStart(2, '0');
@@ -47,7 +60,8 @@ export const columns: ColumnDef<Hours>[] = [
     cell: ({ row }) => {
       const date = new Date(row.original.startTime);
       return `${getHours(date)}:${getMinutes(date).toString().padStart(2, '0')}`;
-    }
+    },
+    enableSorting: true
   },
   {
     accessorKey: 'endTime',
@@ -55,18 +69,33 @@ export const columns: ColumnDef<Hours>[] = [
     cell: ({ row }) => {
       const date = new Date(row.original.endTime);
       return `${getHours(date)}:${getMinutes(date).toString().padStart(2, '0')}`;
+    },
+    enableSorting: true
+  },
+  {
+    accessorKey: 'tasks',
+    header: () => <div className="text-left">Zadania</div>,
+    cell: ({ row }) => {
+      const hoursFieldNames = row.original;
+      return (
+        <div>
+          <HoverCard>
+            <HoverCardTrigger className="cursor-pointer">
+              <Info />
+            </HoverCardTrigger>
+            <HoverCardContent>{hoursFieldNames.tasks}</HoverCardContent>
+          </HoverCard>
+        </div>
+      );
     }
   },
-
   {
     id: 'akcje',
     header: () => <div className="text-left">Akcja</div>,
     cell: ({ row }) => {
       const hour = row.original;
-
       return <HoursOptions hours={hour} />;
     }
   }
-  // ...
 ];
 export default hoursFieldNames;

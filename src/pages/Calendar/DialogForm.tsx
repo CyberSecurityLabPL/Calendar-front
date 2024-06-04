@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { Hours, HoursRequest } from '@/types/Hours';
+import { HoursRequest } from '@/types/Hours';
 import { Dialog } from '@hilla/react-components/Dialog.js';
 import { TextArea } from '@hilla/react-components/TextArea.js';
 import { TimePicker } from '@hilla/react-components/TimePicker.js';
@@ -17,11 +17,12 @@ interface DialogFormProps {
   setWorkEnd: (value: string) => void;
   tasks: string;
   setTasks: (value: string) => void;
-  hours?: Hours;
   reset: () => void;
   setValue: UseFormSetValue<HoursRequest>;
   handleSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
   register: any;
+  handleDeleteHours: (eventId: string) => Promise<void>;
+  editingEventId: string | null;
 }
 
 interface TimePickerDetail {
@@ -38,12 +39,16 @@ const DialogForm = ({
   setWorkEnd,
   tasks,
   setTasks,
-  hours,
-  reset,
   setValue,
   handleSubmit,
+  handleDeleteHours,
+  editingEventId,
   register
 }: DialogFormProps) => {
+  const handleClose = () => {
+    setDialogOpened(false);
+  };
+
   return (
     <Dialog
       opened={isDialogOpen}
@@ -107,11 +112,22 @@ const DialogForm = ({
               className="basis-1/2"
               type="button"
               variant="outline"
-              onClick={() => setDialogOpened(false)}>
+              onClick={handleClose}>
               Wyjdź
             </Button>
-            <Button className="basis-1/2" type="submit">
-              Zapisz
+            {editingEventId && (
+              <Button
+                type="button"
+                onClick={() => {
+                  handleDeleteHours(editingEventId);
+                  handleClose();
+                }}
+                color="secondary">
+                Usuń
+              </Button>
+            )}
+            <Button type="submit" color="primary">
+              {editingEventId ? 'Aktualizuj' : 'Dodaj'}
             </Button>
           </div>
         </VerticalLayout>
