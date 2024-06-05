@@ -3,14 +3,11 @@ import { Hours, HoursRequest } from '@/types/Hours';
 import { Axios } from '@/utils/Axios';
 import {
   useMutation,
-  useQuery,
   useQueryClient,
   useSuspenseQuery
 } from '@tanstack/react-query';
 
 import { hoursQueryOptions } from './hoursQueryOptions';
-
-// import { monthlyHoursQueryOptions } from './monthlyHoursQueryOptions';
 
 const useHours = (date?: string) => {
   const queryClient = useQueryClient();
@@ -21,13 +18,6 @@ const useHours = (date?: string) => {
     isLoading: hoursLoading,
     isError: hoursError
   } = useSuspenseQuery(hoursQueryOptions);
-
-  // const {
-  //   data: monthlyHours,
-  //   refetch: monthlyHoursRefetch,
-  //   isLoading: monthlyHoursLoading,
-  //   isError: monthlyHoursError
-  // } = useQuery(monthlyHoursQueryOptions(date || ''));
 
   const {
     mutateAsync: addHours,
@@ -76,11 +66,6 @@ const useHours = (date?: string) => {
     hoursRefetch,
     hoursLoading,
     hoursError,
-
-    // monthlyHours,
-    // monthlyHoursRefetch,
-    // monthlyHoursLoading,
-    // monthlyHoursError,
 
     addHours,
     addHoursPending,

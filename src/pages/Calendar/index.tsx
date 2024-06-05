@@ -1,12 +1,12 @@
 import useHours from '@/hooks/useHours';
 import { HoursRequest } from '@/types/Hours';
+import { timeToDate, timeToHours } from '@/utils/Time';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
 
 import DialogForm from './DialogForm';
 
@@ -30,7 +30,7 @@ export function Calendar() {
 
   const handleDateClick = (info: any) => {
     setSelectedDate(info.dateStr);
-    setEditingEventId(null); // Clear editingEventId to add a new entry
+    setEditingEventId(null);
     setDialogOpened(true);
   };
 
@@ -47,66 +47,15 @@ export function Calendar() {
     end.setHours(end.getHours() + 2);
 
     setEditingEventId(eventId);
-    setSelectedDate(start.toISOString().substr(0, 10));
-    setWorkStart(start.toISOString().substr(11, 5));
-    setWorkEnd(end.toISOString().substr(11, 5));
+    setSelectedDate(timeToDate(start));
+    setWorkStart(timeToHours(start));
+    setWorkEnd(timeToHours(end));
     setTasks(event.tasks);
 
     setValue('startTime', start);
     setValue('endTime', end);
     setValue('tasks', event.tasks);
     setDialogOpened(true);
-  };
-
-  const handleDeleteHours = async (eventId: string) => {
-    try {
-      await deleteHours(eventId);
-      toast.success('Pomyślnie usunięto godziny!');
-    } catch (error) {
-      console.error('Failed to delete hours:', error);
-      toast.error('Wystąpił błąd podczas usuwania godzin');
-    }
-  };
-
-  const onSubmit = async (data: HoursRequest) => {
-    if (!selectedDate) {
-      toast.error('Data nie została wybrana');
-      return;
-    }
-
-    const createDate = (date: string, time: string) => {
-      const [hours, minutes] = time.split(':');
-      const dateObj = new Date(`${date}T${hours}:${minutes}:00`);
-      dateObj.setHours(dateObj.getHours() + 2);
-      return new Date(dateObj);
-    };
-
-    const startDate = createDate(selectedDate, workStart);
-    const endDate = createDate(selectedDate, workEnd);
-    const requestData: HoursRequest = {
-      ...data,
-      startTime: startDate,
-      endTime: endDate,
-      tasks
-    };
-
-    try {
-      if (editingEventId) {
-        await editHours({ ...requestData, hoursId: editingEventId });
-        toast.success('Pomyślnie zedytowano dane!');
-      } else {
-        await addHours(requestData);
-        toast.success('Pomyślnie dodano!');
-      }
-      setDialogOpened(false);
-    } catch (error) {
-      if (editingEventId) {
-        toast.error('Wystąpił błąd podczas edytowania godzin');
-      } else {
-        toast.error('Wystąpił błąd podczas dodawania godzin');
-      }
-      console.error('Error:', error);
-    }
   };
 
   return (
@@ -167,6 +116,7 @@ export function Calendar() {
         isDialogOpen={isDialogOpen}
         setDialogOpened={setDialogOpened}
         selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
         workStart={workStart}
         setWorkStart={setWorkStart}
         workEnd={workEnd}
@@ -175,10 +125,12 @@ export function Calendar() {
         setTasks={setTasks}
         reset={reset}
         setValue={setValue}
-        handleSubmit={handleSubmit(onSubmit)}
+        handleSubmit={handleSubmit}
         register={register}
-        handleDeleteHours={handleDeleteHours}
+        handleDeleteHours={deleteHours}
         editingEventId={editingEventId}
+        addHours={addHours}
+        editHours={editHours}
       />
     </>
   );

@@ -10,8 +10,9 @@ import useHours from '@/hooks/useHours';
 import DialogForm from '@/pages/Calendar/DialogForm';
 import { Hours } from '@/types/Hours';
 import { HoursRequest } from '@/types/Hours';
+import { timeToDate, timeToHours } from '@/utils/Time';
 import { MoreHorizontal } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
@@ -35,71 +36,32 @@ const HoursOptions = ({ hours }: HoursOptionsProps) => {
   const [workEnd, setWorkEnd] = useState<string>('16:00');
   const [tasks, setTasks] = useState<string>('');
 
-  useEffect(() => {
-    if (hours) {
-      const start = new Date(hours.startTime);
-      const end = new Date(hours.endTime);
-      start.setHours(start.getHours() + 2);
-      end.setHours(end.getHours() + 2);
-      setSelectedDate(start.toISOString().substr(0, 10));
-      setWorkStart(start.toISOString().substr(11, 5));
-      setWorkEnd(end.toISOString().substr(11, 5));
-      setTasks(hours.tasks);
-      setValue('startTime', start);
-      setValue('endTime', end);
-      setValue('tasks', hours.tasks);
-    }
-  }, [hours, setValue]);
+  const handleEditClick = () => {
+    const start = new Date(hours.startTime);
+    const end = new Date(hours.endTime);
+    start.setHours(start.getHours() + 2);
+    end.setHours(end.getHours() + 2);
+    setSelectedDate(timeToDate(start));
+    setWorkStart(timeToHours(start));
+    setWorkEnd(timeToHours(end));
+    setTasks(hours.tasks);
+    setValue('startTime', start);
+    setValue('endTime', end);
+    setValue('tasks', hours.tasks);
+    setDialogOpened(true);
+  };
 
   const handleDeleteHours = async () => {
     try {
       await deleteHours(hours.hoursId);
       toast.success('Pomyślnie usunięto godziny!');
+      setDialogOpened(false);
     } catch (error) {
       console.error('Failed to delete hours:', error);
       let errorMessage = 'Wystąpił błąd podczas usuwania godzin';
       toast.error(errorMessage);
     }
   };
-
-  const handleEditHours = handleSubmit(async (data: HoursRequest) => {
-    if (!selectedDate) {
-      toast.error('Data nie została wybrana');
-      return;
-    }
-
-    const createDate = (date: string, time: string) => {
-      const [hours, minutes] = time.split(':');
-      const dateObj = new Date(`${date}T${hours}:${minutes}:00`);
-      dateObj.setHours(dateObj.getHours() + 2);
-      return new Date(dateObj);
-    };
-
-    const startDate = createDate(selectedDate, workStart);
-    const endDate = createDate(selectedDate, workEnd);
-
-    const requestData: HoursRequest = {
-      ...data,
-      startTime: new Date(startDate),
-      endTime: new Date(endDate),
-      tasks: tasks
-    };
-
-    try {
-      if (hours) {
-        await editHours({ ...requestData, hoursId: hours.hoursId });
-        toast.success('Pomyślnie zedytowano dane!');
-      } else {
-        await addHours(requestData);
-        toast.success('Pomyślnie dodano!');
-      }
-    } catch (error) {
-      console.error('Failed to submit data:', error);
-      toast.error('Wystąpił błąd podczas dodawania godzin pracy');
-    } finally {
-      setDialogOpened(false);
-    }
-  });
 
   return (
     <>
@@ -111,7 +73,7 @@ const HoursOptions = ({ hours }: HoursOptionsProps) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem onClick={() => setDialogOpened(true)}>
+          <DropdownMenuItem onClick={handleEditClick}>
             Edytuj dane
           </DropdownMenuItem>
           <DropdownMenuSeparator />
@@ -127,19 +89,23 @@ const HoursOptions = ({ hours }: HoursOptionsProps) => {
         isDialogOpen={isDialogOpen}
         setDialogOpened={setDialogOpened}
         selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
         workStart={workStart}
         setWorkStart={setWorkStart}
         workEnd={workEnd}
         setWorkEnd={setWorkEnd}
         tasks={tasks}
         setTasks={setTasks}
-        hours={hours}
         reset={reset}
         setValue={setValue}
-        handleSubmit={handleEditHours}
+        handleSubmit={handleSubmit}
         register={register}
         handleDeleteHours={handleDeleteHours}
-        editingEventId={null}
+        editingEventId={hours.hoursId}
+        addHours={addHours}
+        editHours={editHours}
+        hours={hours}
+        hoursId={hours.hoursId}
       />
     </>
   );
