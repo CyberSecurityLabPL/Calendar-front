@@ -26,7 +26,8 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
   getPaginationRowModel,
-  useReactTable
+  useReactTable,
+  TableState
 } from '@tanstack/react-table';
 import * as React from 'react';
 
@@ -36,6 +37,7 @@ interface DataTableProps<TData, TValue> {
   filterPlaceholder?: string;
   noResultsMessage?: string;
   searchColumnKey?: string;
+  initialState?: Partial<TableState>;
 }
 
 export function DataTable<TData, TValue>({
@@ -43,18 +45,25 @@ export function DataTable<TData, TValue>({
   data,
   filterPlaceholder = 'Wyszukaj...',
   noResultsMessage = 'Brak wyników.',
-  searchColumnKey
+  searchColumnKey,
+  initialState
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [sorting, setSorting] = React.useState<SortingState>(
+    initialState?.sorting || []
+  );
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    initialState?.columnFilters || []
   );
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
+    React.useState<VisibilityState>(initialState?.columnVisibility || {});
+  const [rowSelection, setRowSelection] = React.useState(
+    initialState?.rowSelection || {}
+  );
+
   const table = useReactTable({
     data,
     columns,
+    initialState,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,

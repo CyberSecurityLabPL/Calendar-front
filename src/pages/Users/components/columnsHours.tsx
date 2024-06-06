@@ -55,13 +55,13 @@ export const columns: ColumnDef<Hours>[] = [
     enableSorting: true
   },
   {
-    accessorKey: 'startTime',
+    accessorKey: 'startHour',
     header: () => <div className="text-left">Początek pracy</div>,
     cell: ({ row }) => {
       const date = new Date(row.original.startTime);
       return `${getHours(date)}:${getMinutes(date).toString().padStart(2, '0')}`;
     },
-    enableSorting: true
+    enableSorting: false
   },
   {
     accessorKey: 'endTime',
@@ -70,7 +70,7 @@ export const columns: ColumnDef<Hours>[] = [
       const date = new Date(row.original.endTime);
       return `${getHours(date)}:${getMinutes(date).toString().padStart(2, '0')}`;
     },
-    enableSorting: true
+    enableSorting: false
   },
   {
     accessorKey: 'tasks',
@@ -98,4 +98,5 @@ export const columns: ColumnDef<Hours>[] = [
     }
   }
 ];
+
 export default hoursFieldNames;

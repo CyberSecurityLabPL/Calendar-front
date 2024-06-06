@@ -20,7 +20,6 @@ interface HoursOptionsProps {
 
 const HoursOptions = ({ hours }: HoursOptionsProps) => {
   const [isDialogOpen, setDialogOpened] = useState(false);
-  const [editingEventId, setEditingEventId] = useState<string | null>(null);
   const { deleteHours, deleteHoursPending } = useHours();
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
@@ -55,7 +54,6 @@ const HoursOptions = ({ hours }: HoursOptionsProps) => {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
-            <span className="sr-only">Open menu</span>
             <MoreHorizontal className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
@@ -77,8 +75,6 @@ const HoursOptions = ({ hours }: HoursOptionsProps) => {
         setDialogOpened={setDialogOpened}
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
-        editingEventId={editingEventId}
-        setEditingEventId={setEditingEventId}
         hours={hours}
         hoursId={hours.hoursId}
       />

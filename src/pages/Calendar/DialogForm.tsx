@@ -16,8 +16,8 @@ interface DialogFormProps {
   setDialogOpened: (open: boolean) => void;
   selectedDate: string | null;
   setSelectedDate: (date: string | null) => void;
-  editingEventId: string | null;
-  setEditingEventId: (id: string | null) => void;
+  event?: Hours | null;
+  setEvent?: (event: Hours | null) => void;
   hours?: Hours;
   hoursId?: string;
 }
@@ -31,13 +31,12 @@ const DialogForm = ({
   setDialogOpened,
   selectedDate,
   setSelectedDate,
-  editingEventId,
-  setEditingEventId,
-  hours
+  hours,
+  event,
+  setEvent
 }: DialogFormProps) => {
   const handleClose = () => {
     setDialogOpened(false);
-    setEditingEventId(null);
   };
 
   const { editHours, deleteHours, addHours } = useHours();
@@ -66,7 +65,24 @@ const DialogForm = ({
       setValue('endTime', end);
       setValue('tasks', hours.tasks);
     }
-  }, [hours, setValue, setSelectedDate, setWorkStart, setWorkEnd, setTasks]);
+    if (event) {
+      const start = new Date(event.startTime);
+      const end = new Date(event.endTime);
+      start.setHours(start.getHours() + 2);
+      end.setHours(end.getHours() + 2);
+      setSelectedDate(timeToDate(start));
+      setWorkStart(timeToHours(start));
+      setWorkEnd(timeToHours(end));
+      setTasks(event.tasks);
+      setValue('startTime', start);
+      setValue('endTime', end);
+      setValue('tasks', event.tasks);
+    } else {
+      setWorkStart('8:00');
+      setWorkEnd('16:00');
+      setTasks('');
+    }
+  }, [hours, event, selectedDate]);
 
   const onSubmit = async (data: HoursRequest) => {
     if (!selectedDate) {
@@ -91,8 +107,8 @@ const DialogForm = ({
     };
 
     try {
-      if (editingEventId) {
-        await editHours({ ...requestData, hoursId: editingEventId });
+      if (event) {
+        await editHours({ ...requestData, hoursId: event.hoursId });
         toast.success('Pomyślnie zedytowano dane!');
       } else if (hours && hours.hoursId) {
         await editHours({ ...requestData, hoursId: hours.hoursId });
@@ -102,9 +118,8 @@ const DialogForm = ({
         toast.success('Pomyślnie dodano!');
       }
       setDialogOpened(false);
-      setEditingEventId(null);
     } catch (error) {
-      if (editingEventId || (hours && hours.hoursId)) {
+      if (event || (hours && hours.hoursId)) {
         toast.error('Wystąpił błąd podczas edytowania godzin');
       } else {
         toast.error('Wystąpił błąd podczas dodawania godzin');
@@ -114,9 +129,9 @@ const DialogForm = ({
   };
 
   const handleDelete = async () => {
-    if (!editingEventId) return;
+    if (!event) return;
     try {
-      await deleteHours(editingEventId);
+      await deleteHours(event.hoursId);
       toast.success('Pomyślnie usunięto godziny!');
       handleClose();
     } catch (error) {
@@ -191,15 +206,13 @@ const DialogForm = ({
               onClick={handleClose}>
               Wyjdź
             </Button>
-            {editingEventId && (
+            {event && (
               <Button type="button" onClick={handleDelete} color="secondary">
                 Usuń
               </Button>
             )}
             <Button type="submit" color="primary">
-              {editingEventId || (hours && hours.hoursId)
-                ? 'Aktualizuj'
-                : 'Dodaj'}
+              {event || (hours && hours.hoursId) ? 'Aktualizuj' : 'Dodaj'}
             </Button>
           </div>
         </VerticalLayout>

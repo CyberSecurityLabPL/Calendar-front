@@ -1,4 +1,5 @@
 import useHours from '@/hooks/useHours';
+import { Hours } from '@/types/Hours';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import FullCalendar from '@fullcalendar/react';
@@ -10,23 +11,23 @@ import DialogForm from './DialogForm';
 export function Calendar() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [isDialogOpen, setDialogOpened] = useState(false);
-  const [editingEventId, setEditingEventId] = useState<string | null>(null);
-
+  const [event, setEvent] = useState<Hours | null>(null);
   const { hours } = useHours();
 
   const handleDateClick = (info: any) => {
     setSelectedDate(info.dateStr);
-    setEditingEventId(null);
+    setEvent(null);
     setDialogOpened(true);
   };
 
   const handleEventClick = (info: any) => {
     info.jsEvent.preventDefault();
+    setEvent(null);
     const eventId = info.event.url;
     const event = hours?.find(hour => hour.hoursId == eventId);
     if (!event) return;
     setDialogOpened(true);
-    setEditingEventId(eventId);
+    setEvent(event);
   };
 
   return (
@@ -88,8 +89,8 @@ export function Calendar() {
         setDialogOpened={setDialogOpened}
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
-        editingEventId={editingEventId}
-        setEditingEventId={setEditingEventId}
+        setEvent={setEvent}
+        event={event}
       />
     </>
   );
