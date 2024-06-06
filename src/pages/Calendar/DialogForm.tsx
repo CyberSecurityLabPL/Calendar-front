@@ -18,8 +18,6 @@ interface DialogFormProps {
   setSelectedDate: (date: string | null) => void;
   event?: Hours | null;
   setEvent?: (event: Hours | null) => void;
-  hours?: Hours;
-  hoursId?: string;
 }
 
 interface TimePickerDetail {
@@ -31,9 +29,7 @@ const DialogForm = ({
   setDialogOpened,
   selectedDate,
   setSelectedDate,
-  hours,
-  event,
-  setEvent
+  event
 }: DialogFormProps) => {
   const handleClose = () => {
     setDialogOpened(false);
@@ -52,19 +48,6 @@ const DialogForm = ({
   });
 
   useEffect(() => {
-    if (hours) {
-      const start = new Date(hours.startTime);
-      const end = new Date(hours.endTime);
-      start.setHours(start.getHours() + 2);
-      end.setHours(end.getHours() + 2);
-      setSelectedDate(timeToDate(start));
-      setWorkStart(timeToHours(start));
-      setWorkEnd(timeToHours(end));
-      setTasks(hours.tasks);
-      setValue('startTime', start);
-      setValue('endTime', end);
-      setValue('tasks', hours.tasks);
-    }
     if (event) {
       const start = new Date(event.startTime);
       const end = new Date(event.endTime);
@@ -82,7 +65,7 @@ const DialogForm = ({
       setWorkEnd('16:00');
       setTasks('');
     }
-  }, [hours, event, selectedDate]);
+  }, [event, selectedDate]);
 
   const onSubmit = async (data: HoursRequest) => {
     if (!selectedDate) {
@@ -110,16 +93,13 @@ const DialogForm = ({
       if (event) {
         await editHours({ ...requestData, hoursId: event.hoursId });
         toast.success('Pomyślnie zedytowano dane!');
-      } else if (hours && hours.hoursId) {
-        await editHours({ ...requestData, hoursId: hours.hoursId });
-        toast.success('Pomyślnie zedytowano dane!');
       } else {
         await addHours(requestData);
         toast.success('Pomyślnie dodano!');
       }
       setDialogOpened(false);
     } catch (error) {
-      if (event || (hours && hours.hoursId)) {
+      if (event) {
         toast.error('Wystąpił błąd podczas edytowania godzin');
       } else {
         toast.error('Wystąpił błąd podczas dodawania godzin');
@@ -212,7 +192,7 @@ const DialogForm = ({
               </Button>
             )}
             <Button type="submit" color="primary">
-              {event || (hours && hours.hoursId) ? 'Aktualizuj' : 'Dodaj'}
+              {event ? 'Aktualizuj' : 'Dodaj'}
             </Button>
           </div>
         </VerticalLayout>

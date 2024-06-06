@@ -75,8 +75,7 @@ const HoursOptions = ({ hours }: HoursOptionsProps) => {
         setDialogOpened={setDialogOpened}
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
-        hours={hours}
-        hoursId={hours.hoursId}
+        event={hours}
       />
     </>
   );
