@@ -1,12 +1,9 @@
 import useHours from '@/hooks/useHours';
-import { HoursRequest } from '@/types/Hours';
-import { timeToDate, timeToHours } from '@/utils/Time';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
 
 import DialogForm from './DialogForm';
 
@@ -14,13 +11,6 @@ export function Calendar() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [isDialogOpen, setDialogOpened] = useState(false);
   const [editingEventId, setEditingEventId] = useState<string | null>(null);
-  const { handleSubmit, reset, setValue, register } = useForm<HoursRequest>({
-    defaultValues: {
-      startTime: new Date(),
-      endTime: new Date(),
-      tasks: ''
-    }
-  });
 
   const { hours, addHours, editHours, deleteHours } = useHours();
 
@@ -39,23 +29,8 @@ export function Calendar() {
     const eventId = info.event.url;
     const event = hours?.find(hour => hour.hoursId == eventId);
     if (!event) return;
-
-    const start = new Date(event.startTime);
-    const end = new Date(event.endTime);
-
-    start.setHours(start.getHours() + 2);
-    end.setHours(end.getHours() + 2);
-
-    setEditingEventId(eventId);
-    setSelectedDate(timeToDate(start));
-    setWorkStart(timeToHours(start));
-    setWorkEnd(timeToHours(end));
-    setTasks(event.tasks);
-
-    setValue('startTime', start);
-    setValue('endTime', end);
-    setValue('tasks', event.tasks);
     setDialogOpened(true);
+    setEditingEventId(eventId);
   };
 
   return (
@@ -123,12 +98,9 @@ export function Calendar() {
         setWorkEnd={setWorkEnd}
         tasks={tasks}
         setTasks={setTasks}
-        reset={reset}
-        setValue={setValue}
-        handleSubmit={handleSubmit}
-        register={register}
         handleDeleteHours={deleteHours}
         editingEventId={editingEventId}
+        setEditingEventId={setEditingEventId}
         addHours={addHours}
         editHours={editHours}
       />

@@ -7,7 +7,7 @@ import { TextArea } from '@hilla/react-components/TextArea.js';
 import { TimePicker } from '@hilla/react-components/TimePicker.js';
 import { VerticalLayout } from '@hilla/react-components/VerticalLayout.js';
 import { useEffect } from 'react';
-import { UseFormSetValue, UseFormHandleSubmit } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 interface DialogFormProps {
@@ -21,12 +21,9 @@ interface DialogFormProps {
   setWorkEnd: (value: string) => void;
   tasks: string;
   setTasks: (value: string) => void;
-  reset: () => void;
-  setValue: UseFormSetValue<HoursRequest>;
-  handleSubmit: UseFormHandleSubmit<HoursRequest>;
-  register: any;
   handleDeleteHours: (hoursId: string) => Promise<void>;
   editingEventId: string | null;
+  setEditingEventId: (id: string | null) => void;
   addHours: (data: HoursRequest) => Promise<Hours>;
   editHours: (data: HoursRequest) => Promise<Hours>;
   hours?: Hours;
@@ -48,11 +45,8 @@ const DialogForm = ({
   setWorkEnd,
   tasks,
   setTasks,
-  setValue,
-  handleSubmit,
   handleDeleteHours,
   editingEventId,
-  register,
   addHours,
   editHours,
   hours
@@ -60,6 +54,14 @@ const DialogForm = ({
   const handleClose = () => {
     setDialogOpened(false);
   };
+
+  const { handleSubmit, setValue, register } = useForm<HoursRequest>({
+    defaultValues: {
+      startTime: new Date(),
+      endTime: new Date(),
+      tasks: ''
+    }
+  });
 
   useEffect(() => {
     if (hours) {

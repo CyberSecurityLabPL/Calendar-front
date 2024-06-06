@@ -9,11 +9,9 @@ import {
 import useHours from '@/hooks/useHours';
 import DialogForm from '@/pages/Calendar/DialogForm';
 import { Hours } from '@/types/Hours';
-import { HoursRequest } from '@/types/Hours';
 import { timeToDate, timeToHours } from '@/utils/Time';
 import { MoreHorizontal } from 'lucide-react';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 
 interface HoursOptionsProps {
@@ -22,15 +20,8 @@ interface HoursOptionsProps {
 
 const HoursOptions = ({ hours }: HoursOptionsProps) => {
   const [isDialogOpen, setDialogOpened] = useState(false);
+  const [editingEventId, setEditingEventId] = useState<string | null>(null);
   const { deleteHours, deleteHoursPending, editHours, addHours } = useHours();
-  const { handleSubmit, reset, setValue, register } = useForm<HoursRequest>({
-    defaultValues: {
-      startTime: new Date(),
-      endTime: new Date(),
-      tasks: ''
-    }
-  });
-
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [workStart, setWorkStart] = useState<string>('08:00');
   const [workEnd, setWorkEnd] = useState<string>('16:00');
@@ -41,13 +32,13 @@ const HoursOptions = ({ hours }: HoursOptionsProps) => {
     const end = new Date(hours.endTime);
     start.setHours(start.getHours() + 2);
     end.setHours(end.getHours() + 2);
+
     setSelectedDate(timeToDate(start));
     setWorkStart(timeToHours(start));
     setWorkEnd(timeToHours(end));
     setTasks(hours.tasks);
-    setValue('startTime', start);
-    setValue('endTime', end);
-    setValue('tasks', hours.tasks);
+    setEditingEventId(hours.hoursId);
+
     setDialogOpened(true);
   };
 
@@ -62,6 +53,19 @@ const HoursOptions = ({ hours }: HoursOptionsProps) => {
       toast.error(errorMessage);
     }
   };
+
+  useEffect(() => {
+    if (hours) {
+      const start = new Date(hours.startTime);
+      const end = new Date(hours.endTime);
+      start.setHours(start.getHours() + 2);
+      end.setHours(end.getHours() + 2);
+      setSelectedDate(timeToDate(start));
+      setWorkStart(timeToHours(start));
+      setWorkEnd(timeToHours(end));
+      setTasks(hours.tasks);
+    }
+  }, [hours]);
 
   return (
     <>
@@ -96,12 +100,9 @@ const HoursOptions = ({ hours }: HoursOptionsProps) => {
         setWorkEnd={setWorkEnd}
         tasks={tasks}
         setTasks={setTasks}
-        reset={reset}
-        setValue={setValue}
-        handleSubmit={handleSubmit}
-        register={register}
         handleDeleteHours={handleDeleteHours}
-        editingEventId={hours.hoursId}
+        editingEventId={editingEventId}
+        setEditingEventId={setEditingEventId}
         addHours={addHours}
         editHours={editHours}
         hours={hours}
