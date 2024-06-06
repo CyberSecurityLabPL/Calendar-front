@@ -1,12 +1,13 @@
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+import useHours from '@/hooks/useHours';
 import { Hours, HoursRequest } from '@/types/Hours';
 import { timeToDate, timeToHours } from '@/utils/Time';
 import { Dialog } from '@hilla/react-components/Dialog.js';
 import { TextArea } from '@hilla/react-components/TextArea.js';
 import { TimePicker } from '@hilla/react-components/TimePicker.js';
 import { VerticalLayout } from '@hilla/react-components/VerticalLayout.js';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
@@ -15,17 +16,8 @@ interface DialogFormProps {
   setDialogOpened: (open: boolean) => void;
   selectedDate: string | null;
   setSelectedDate: (date: string | null) => void;
-  workStart: string;
-  setWorkStart: (value: string) => void;
-  workEnd: string;
-  setWorkEnd: (value: string) => void;
-  tasks: string;
-  setTasks: (value: string) => void;
-  handleDeleteHours: (hoursId: string) => Promise<void>;
   editingEventId: string | null;
   setEditingEventId: (id: string | null) => void;
-  addHours: (data: HoursRequest) => Promise<Hours>;
-  editHours: (data: HoursRequest) => Promise<Hours>;
   hours?: Hours;
   hoursId?: string;
 }
@@ -39,22 +31,19 @@ const DialogForm = ({
   setDialogOpened,
   selectedDate,
   setSelectedDate,
-  workStart,
-  setWorkStart,
-  workEnd,
-  setWorkEnd,
-  tasks,
-  setTasks,
-  handleDeleteHours,
   editingEventId,
-  addHours,
-  editHours,
+  setEditingEventId,
   hours
 }: DialogFormProps) => {
   const handleClose = () => {
     setDialogOpened(false);
+    setEditingEventId(null);
   };
 
+  const { editHours, deleteHours, addHours } = useHours();
+  const [workStart, setWorkStart] = useState<string>('08:00');
+  const [workEnd, setWorkEnd] = useState<string>('16:00');
+  const [tasks, setTasks] = useState<string>('');
   const { handleSubmit, setValue, register } = useForm<HoursRequest>({
     defaultValues: {
       startTime: new Date(),
@@ -105,13 +94,17 @@ const DialogForm = ({
       if (editingEventId) {
         await editHours({ ...requestData, hoursId: editingEventId });
         toast.success('Pomyślnie zedytowano dane!');
+      } else if (hours && hours.hoursId) {
+        await editHours({ ...requestData, hoursId: hours.hoursId });
+        toast.success('Pomyślnie zedytowano dane!');
       } else {
         await addHours(requestData);
         toast.success('Pomyślnie dodano!');
       }
       setDialogOpened(false);
+      setEditingEventId(null);
     } catch (error) {
-      if (editingEventId) {
+      if (editingEventId || (hours && hours.hoursId)) {
         toast.error('Wystąpił błąd podczas edytowania godzin');
       } else {
         toast.error('Wystąpił błąd podczas dodawania godzin');
@@ -123,7 +116,7 @@ const DialogForm = ({
   const handleDelete = async () => {
     if (!editingEventId) return;
     try {
-      await handleDeleteHours(editingEventId);
+      await deleteHours(editingEventId);
       toast.success('Pomyślnie usunięto godziny!');
       handleClose();
     } catch (error) {
@@ -204,7 +197,9 @@ const DialogForm = ({
               </Button>
             )}
             <Button type="submit" color="primary">
-              {editingEventId ? 'Aktualizuj' : 'Dodaj'}
+              {editingEventId || (hours && hours.hoursId)
+                ? 'Aktualizuj'
+                : 'Dodaj'}
             </Button>
           </div>
         </VerticalLayout>

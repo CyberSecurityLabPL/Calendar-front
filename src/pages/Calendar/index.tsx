@@ -12,11 +12,7 @@ export function Calendar() {
   const [isDialogOpen, setDialogOpened] = useState(false);
   const [editingEventId, setEditingEventId] = useState<string | null>(null);
 
-  const { hours, addHours, editHours, deleteHours } = useHours();
-
-  const [workStart, setWorkStart] = useState<string>('08:00');
-  const [workEnd, setWorkEnd] = useState<string>('16:00');
-  const [tasks, setTasks] = useState<string>('');
+  const { hours } = useHours();
 
   const handleDateClick = (info: any) => {
     setSelectedDate(info.dateStr);
@@ -92,17 +88,8 @@ export function Calendar() {
         setDialogOpened={setDialogOpened}
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
-        workStart={workStart}
-        setWorkStart={setWorkStart}
-        workEnd={workEnd}
-        setWorkEnd={setWorkEnd}
-        tasks={tasks}
-        setTasks={setTasks}
-        handleDeleteHours={deleteHours}
         editingEventId={editingEventId}
         setEditingEventId={setEditingEventId}
-        addHours={addHours}
-        editHours={editHours}
       />
     </>
   );
