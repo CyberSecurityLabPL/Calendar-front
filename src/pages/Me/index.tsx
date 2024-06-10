@@ -13,6 +13,8 @@ const Me = () => {
         That's because we've defined a loader in the '/users' route!
       */}
       <Link to="/users">Link to users table</Link>
+      <Link to="/calendar">Link to calendar</Link>
+      <Link to="/hoursTable">Link to hours</Link>
     </>
   );
 };

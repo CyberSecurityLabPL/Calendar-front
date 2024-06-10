@@ -1,7 +1,7 @@
 import useUsers from '@/hooks/useUsers';
 
 import { DataTable } from './components/DataTable';
-import { columns } from './components/columns';
+import { columns } from './components/columnsUsers';
 
 export default function Users() {
   const { users } = useUsers();
