@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
-interface DialogFormProps {
+interface HoursFormProps {
   isDialogOpen: boolean;
   setDialogOpened: (open: boolean) => void;
   selectedDate: string | null;
@@ -24,13 +24,13 @@ interface TimePickerDetail {
   value: string;
 }
 
-const DialogForm = ({
+const HoursForm = ({
   isDialogOpen,
   setDialogOpened,
   selectedDate,
   setSelectedDate,
   event
-}: DialogFormProps) => {
+}: HoursFormProps) => {
   const handleClose = () => {
     setDialogOpened(false);
   };
@@ -201,4 +201,4 @@ const DialogForm = ({
   );
 };
 
-export default DialogForm;
+export default HoursForm;

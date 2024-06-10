@@ -7,7 +7,7 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import useHours from '@/hooks/useHours';
-import DialogForm from '@/pages/Calendar/DialogForm';
+import HoursForm from '@/pages/Calendar/HoursForm';
 import { Hours } from '@/types/Hours';
 import { timeToDate } from '@/utils/Time';
 import { MoreHorizontal } from 'lucide-react';
@@ -70,7 +70,7 @@ const HoursOptions = ({ hours }: HoursOptionsProps) => {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <DialogForm
+      <HoursForm
         isDialogOpen={isDialogOpen}
         setDialogOpened={setDialogOpened}
         selectedDate={selectedDate}

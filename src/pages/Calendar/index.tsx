@@ -6,7 +6,7 @@ import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { useState } from 'react';
 
-import DialogForm from './DialogForm';
+import HoursForm from './HoursForm';
 
 export function Calendar() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
@@ -84,7 +84,7 @@ export function Calendar() {
         />
       </div>
 
-      <DialogForm
+      <HoursForm
         isDialogOpen={isDialogOpen}
         setDialogOpened={setDialogOpened}
         selectedDate={selectedDate}

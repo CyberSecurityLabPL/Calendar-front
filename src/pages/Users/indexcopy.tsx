@@ -18,7 +18,7 @@ export default function HoursTable() {
   };
 
   return (
-    <div className="container mx-auto w-full py-10">
+    <div className="container mx-auto w-3/4 py-10">
       <DataTable columns={columns} data={hours} initialState={initialState} />
     </div>
   );
