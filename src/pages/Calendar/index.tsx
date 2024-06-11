@@ -4,7 +4,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import PdfFetcher from '../Users/components/PdfFetcher';
 import HoursForm from './HoursForm';
@@ -14,6 +14,26 @@ export function Calendar() {
   const [isDialogOpen, setDialogOpened] = useState(false);
   const [event, setEvent] = useState<Hours | null>(null);
   const { hours } = useHours();
+
+  const calendarRef = useRef<FullCalendar | null>(null);
+
+  const getCurrentMonth = () => {
+    if (!calendarRef.current) return '2024-06';
+    const calendarApi = calendarRef.current.getApi();
+    const date = calendarApi.getDate();
+
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+
+    if (month > 12) {
+      month = 1;
+      year += 1;
+    }
+
+    const formattedMonth = month < 10 ? `0${month}` : month;
+
+    return `${year}-${formattedMonth}`;
+  };
 
   const handleDateClick = (info: any) => {
     setSelectedDate(info.dateStr);
@@ -36,6 +56,7 @@ export function Calendar() {
       <div className="flex w-full justify-start">
         <div style={{ width: '100%', maxWidth: '950px', marginRight: '2rem' }}>
           <FullCalendar
+            ref={calendarRef}
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             selectable={true}
             initialView="dayGridMonth"
@@ -85,7 +106,7 @@ export function Calendar() {
             )}
           />
         </div>
-        <PdfFetcher />
+        <PdfFetcher currentMonth={getCurrentMonth} />
       </div>
       <HoursForm
         isDialogOpen={isDialogOpen}
