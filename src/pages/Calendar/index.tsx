@@ -6,6 +6,7 @@ import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { useState } from 'react';
 
+import PdfFetcher from '../Users/components/PdfFetcher';
 import HoursForm from './HoursForm';
 
 export function Calendar() {
@@ -32,58 +33,60 @@ export function Calendar() {
 
   return (
     <>
-      <div style={{ width: '80%', maxWidth: '950px' }}>
-        <FullCalendar
-          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-          selectable={true}
-          initialView="dayGridMonth"
-          headerToolbar={{
-            start: 'today prev,next',
-            center: 'title',
-            end: 'dayGridMonth,timeGridWeek,timeGridDay'
-          }}
-          dateClick={handleDateClick}
-          eventClick={handleEventClick}
-          locale={'pl'}
-          buttonText={{
-            today: 'Dzisiaj',
-            month: 'Miesiąc',
-            week: 'Tydzień',
-            day: 'Dzień'
-          }}
-          displayEventEnd={true}
-          eventTimeFormat={{
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: false
-          }}
-          events={
-            Array.isArray(hours)
-              ? hours.map(hour => ({
-                  title: hour.tasks,
-                  start: hour.startTime,
-                  end: hour.endTime,
-                  url: hour.hoursId.toString(),
-                  display: 'block',
-                  borderColor: 'transparent'
-                }))
-              : []
-          }
-          eventBackgroundColor="rgba(39, 140, 255, 0.95)"
-          eventContent={arg => (
-            <div
-              style={{
-                padding: '0.7rem',
-                whiteSpace: 'normal',
-                fontSize: '0.9rem'
-              }}>
-              <b>{arg.timeText}</b>
-              <div>{arg.event.title}</div>
-            </div>
-          )}
-        />
+      <div className="flex w-full justify-start">
+        <div style={{ width: '100%', maxWidth: '950px', marginRight: '2rem' }}>
+          <FullCalendar
+            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+            selectable={true}
+            initialView="dayGridMonth"
+            headerToolbar={{
+              start: 'today prev,next',
+              center: 'title',
+              end: 'dayGridMonth,timeGridWeek,timeGridDay'
+            }}
+            dateClick={handleDateClick}
+            eventClick={handleEventClick}
+            locale={'pl'}
+            buttonText={{
+              today: 'Dzisiaj',
+              month: 'Miesiąc',
+              week: 'Tydzień',
+              day: 'Dzień'
+            }}
+            displayEventEnd={true}
+            eventTimeFormat={{
+              hour: '2-digit',
+              minute: '2-digit',
+              hour12: false
+            }}
+            events={
+              Array.isArray(hours)
+                ? hours.map(hour => ({
+                    title: hour.tasks,
+                    start: hour.startTime,
+                    end: hour.endTime,
+                    url: hour.hoursId.toString(),
+                    display: 'block',
+                    borderColor: 'transparent'
+                  }))
+                : []
+            }
+            eventBackgroundColor="rgba(39, 140, 255, 0.95)"
+            eventContent={arg => (
+              <div
+                style={{
+                  padding: '0.7rem',
+                  whiteSpace: 'normal',
+                  fontSize: '0.9rem'
+                }}>
+                <b>{arg.timeText}</b>
+                <div>{arg.event.title}</div>
+              </div>
+            )}
+          />
+        </div>
+        <PdfFetcher />
       </div>
-
       <HoursForm
         isDialogOpen={isDialogOpen}
         setDialogOpened={setDialogOpened}

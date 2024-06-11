@@ -14,5 +14,6 @@ export const URLS = {
   GET_MONTHLY_HOURS: (date: string) => `/users/monthlyTasks/${date}`,
   ADD_HOURS: () => '/hours/add',
   EDIT_HOURS: (id: string) => `/hours/${id}`,
-  DELETE_HOURS: (id: string) => `/hours/${id}`
+  DELETE_HOURS: (id: string) => `/hours/${id}`,
+  GET_MONTHLY_HOURS_PDF: (month: string) => `/pdfhours/${month}`
 };

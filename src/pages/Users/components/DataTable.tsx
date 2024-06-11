@@ -31,6 +31,8 @@ import {
 } from '@tanstack/react-table';
 import * as React from 'react';
 
+import PdfFetcher from './PdfFetcher';
+
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -104,6 +106,7 @@ export function DataTable<TData, TValue>({
               Dostosuj kolumny
             </Button>
           </DropdownMenuTrigger>
+
           <DropdownMenuContent align="end">
             {table
               .getAllColumns()
@@ -119,6 +122,9 @@ export function DataTable<TData, TValue>({
               ))}
           </DropdownMenuContent>
         </DropdownMenu>
+        <div className=" justify-end">
+          <PdfFetcher />
+        </div>
       </div>
       <div className="rounded-md border">
         <Table>
