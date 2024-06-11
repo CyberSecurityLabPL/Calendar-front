@@ -122,9 +122,6 @@ export function DataTable<TData, TValue>({
               ))}
           </DropdownMenuContent>
         </DropdownMenu>
-        <div className=" justify-end">
-          <PdfFetcher />
-        </div>
       </div>
       <div className="rounded-md border">
         <Table>
