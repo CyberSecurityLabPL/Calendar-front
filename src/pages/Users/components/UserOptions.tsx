@@ -57,6 +57,7 @@ const UserOptions = ({ user }: UserOptionsProps) => {
           {' '}
           Usuń użytkownika
         </DropdownMenuItem>
+        <DropdownMenuItem>Kalendarz użytkownika</DropdownMenuItem>
       </DropdownMenuContent>
       <UserForm
         user={user}

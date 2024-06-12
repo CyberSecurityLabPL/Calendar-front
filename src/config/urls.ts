@@ -11,6 +11,7 @@ export const URLS = {
   ME: () => '/users/me',
 
   GET_HOURS: () => '/hours/getAllHoursForUser',
+  GET_HOURS_FOR_USER: () => `/hours/getAllHoursForUser`,
   GET_MONTHLY_HOURS: (date: string) => `/users/monthlyTasks/${date}`,
   ADD_HOURS: () => '/hours/add',
   EDIT_HOURS: (id: string) => `/hours/${id}`,

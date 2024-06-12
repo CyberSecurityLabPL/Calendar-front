@@ -32,6 +32,7 @@ import {
 import * as React from 'react';
 
 import PdfFetcher from './PdfFetcher';
+import { UserForm } from './UserForm';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -40,6 +41,7 @@ interface DataTableProps<TData, TValue> {
   noResultsMessage?: string;
   searchColumnKey?: string;
   initialState?: Partial<TableState>;
+  userRole: string;
 }
 
 export function DataTable<TData, TValue>({
@@ -48,7 +50,8 @@ export function DataTable<TData, TValue>({
   filterPlaceholder = 'Wyszukaj...',
   noResultsMessage = 'Brak wyników.',
   searchColumnKey,
-  initialState
+  initialState,
+  userRole
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>(
     initialState?.sorting || []
@@ -61,7 +64,7 @@ export function DataTable<TData, TValue>({
   const [rowSelection, setRowSelection] = React.useState(
     initialState?.rowSelection || {}
   );
-
+  const [isDialogOpen, setDialogOpen] = React.useState(false);
   const table = useReactTable({
     data,
     columns,
@@ -122,6 +125,11 @@ export function DataTable<TData, TValue>({
               ))}
           </DropdownMenuContent>
         </DropdownMenu>
+        {userRole === 'ROLE_ADMIN' && (
+          <Button onClick={() => setDialogOpen(true)} variant="outline">
+            Dodaj użytkownika
+          </Button>
+        )}
       </div>
       <div className="rounded-md border">
         <Table>
@@ -184,6 +192,10 @@ export function DataTable<TData, TValue>({
           disabled={!table.getCanNextPage()}>
           Następna
         </Button>
+        <UserForm
+          isOpen={isDialogOpen}
+          onOpenChange={() => setDialogOpen(!isDialogOpen)}
+        />
       </div>
     </div>
   );

@@ -1,4 +1,6 @@
 import useHours from '@/hooks/useHours';
+import useMe from '@/hooks/useMe';
+import useUserHours from '@/hooks/useUserHours';
 import { Hours } from '@/types/Hours';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -7,13 +9,19 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import { useRef, useState } from 'react';
 
 import PdfFetcher from '../Users/components/PdfFetcher';
+import SelectUsers from '../Users/components/selectUsers';
 import HoursForm from './HoursForm';
 
 export function Calendar() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [isDialogOpen, setDialogOpened] = useState(false);
   const [event, setEvent] = useState<Hours | null>(null);
-  const { hours } = useHours();
+  const { me } = useMe();
+  // const { hours } = useHours();
+  const { userHours } = useUserHours('074221c8-1545-4e4b-a241-60addeaa0764');
+
+  const isAdmin = me && me.role === 'ROLE_ADMIN';
+  const data = isAdmin ? userHours : null;
 
   const calendarRef = useRef<FullCalendar | null>(null);
 
@@ -45,7 +53,7 @@ export function Calendar() {
     info.jsEvent.preventDefault();
     setEvent(null);
     const eventId = info.event.url;
-    const event = hours?.find(hour => hour.hoursId == eventId);
+    const event = data?.find(hour => hour.hoursId == eventId);
     if (!event) return;
     setDialogOpened(true);
     setEvent(event);
@@ -81,8 +89,8 @@ export function Calendar() {
               hour12: false
             }}
             events={
-              Array.isArray(hours)
-                ? hours.map(hour => ({
+              Array.isArray(data)
+                ? data.map(hour => ({
                     title: hour.tasks,
                     start: hour.startTime,
                     end: hour.endTime,
@@ -107,15 +115,19 @@ export function Calendar() {
           />
         </div>
         <PdfFetcher currentMonth={getCurrentMonth} />
+        <SelectUsers />
       </div>
-      <HoursForm
-        isDialogOpen={isDialogOpen}
-        setDialogOpened={setDialogOpened}
-        selectedDate={selectedDate}
-        setSelectedDate={setSelectedDate}
-        setEvent={setEvent}
-        event={event}
-      />
+
+      {me.userRole === 'ROLE_USER' && (
+        <HoursForm
+          isDialogOpen={isDialogOpen}
+          setDialogOpened={setDialogOpened}
+          selectedDate={selectedDate}
+          setSelectedDate={setSelectedDate}
+          setEvent={setEvent}
+          event={event}
+        />
+      )}
     </>
   );
 }

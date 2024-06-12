@@ -1,8 +1,19 @@
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select';
 import useMe from '@/hooks/useMe';
+import useUsers from '@/hooks/useUsers';
 import { Link } from '@tanstack/react-router';
+
+import SelectUsers from '../Users/components/selectUsers';
 
 const Me = () => {
   const { me } = useMe();
+
   return (
     <>
       Welcome {me?.firstName} {me?.lastName}! <br /> Your email is {me?.email}.
