@@ -5,7 +5,7 @@ import { queryOptions } from '@tanstack/react-query';
 
 export const useHoursQueryOptions = (userId: string) =>
   queryOptions({
-    queryKey: ['userHours'],
+    queryKey: ['userHours', userId],
     queryFn: async () =>
       Axios.get<Hours[]>(URLS.GET_HOURS_FOR_USER(), {
         params: { userId: userId }

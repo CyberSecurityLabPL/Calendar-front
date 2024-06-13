@@ -1,4 +1,3 @@
-import useHours from '@/hooks/useHours';
 import useMe from '@/hooks/useMe';
 import useUserHours from '@/hooks/useUserHours';
 import { Hours } from '@/types/Hours';
@@ -16,9 +15,11 @@ export function Calendar() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [isDialogOpen, setDialogOpened] = useState(false);
   const [event, setEvent] = useState<Hours | null>(null);
+  const [selectedUser, setSelectedUser] = useState<string | null>(null);
   const { me } = useMe();
-  // const { hours } = useHours();
-  const { userHours } = useUserHours('074221c8-1545-4e4b-a241-60addeaa0764');
+  const { userHours, userHoursLoading, userHoursError } = useUserHours(
+    selectedUser || '074221c8-1545-4e4b-a241-60addeaa0764'
+  );
 
   const isAdmin = me && me.role === 'ROLE_ADMIN';
   const data = isAdmin ? userHours : null;
@@ -115,7 +116,10 @@ export function Calendar() {
           />
         </div>
         <PdfFetcher currentMonth={getCurrentMonth} />
-        <SelectUsers />
+        <SelectUsers
+          selectedUser={selectedUser}
+          setSelectedUser={setSelectedUser}
+        />
       </div>
 
       {me.userRole === 'ROLE_USER' && (

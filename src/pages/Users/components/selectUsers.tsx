@@ -7,11 +7,23 @@ import {
 } from '@/components/ui/select';
 import useUsers from '@/hooks/useUsers';
 
-const SelectUsers = () => {
+interface SelectUsersProps {
+  selectedUser: string | null;
+  setSelectedUser: (userId: string | null) => void;
+}
+
+const SelectUsers: React.FC<SelectUsersProps> = ({
+  selectedUser,
+  setSelectedUser
+}) => {
   const { users, usersLoading, usersError } = useUsers();
 
+  const handleChange = (value: string) => {
+    setSelectedUser(value);
+  };
+
   return (
-    <Select>
+    <Select onValueChange={handleChange}>
       <SelectTrigger className="w-[180px]">
         <SelectValue placeholder="Użytkownicy" />
       </SelectTrigger>
@@ -27,7 +39,7 @@ const SelectUsers = () => {
         ) : users && users.length > 0 ? (
           users.map(user => (
             <SelectItem key={user.id} value={user.id}>
-              {user.lastName}
+              {user.lastName} {user.id}
             </SelectItem>
           ))
         ) : (
