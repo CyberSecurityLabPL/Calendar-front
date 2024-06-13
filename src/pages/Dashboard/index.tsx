@@ -35,7 +35,10 @@ import {
   Users
 } from 'lucide-react';
 
+import { useLogout } from './logout';
+
 export function Dashboard() {
+  const logout = useLogout();
   return (
     <div className="grid h-screen w-full pl-[53px]">
       <aside className="inset-y fixed  left-0 z-20 flex h-full flex-col border-r">
@@ -91,12 +94,13 @@ export function Dashboard() {
                   variant="ghost"
                   size="icon"
                   className="mt-auto rounded-lg"
-                  aria-label="Konto">
+                  aria-label="Konto"
+                  onClick={logout}>
                   <SquareUser className="size-5" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent side="right" sideOffset={5}>
-                Konto
+                Wyloguj
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>

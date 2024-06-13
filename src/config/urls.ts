@@ -1,6 +1,7 @@
 export const URLS = {
   LOGIN: () => '/auth/signin',
   REFRESH: () => '/auth/refresh',
+  LOGOUT: () => '/auth/logout',
 
   GET_COMPANIES: () => '/company/all',
 

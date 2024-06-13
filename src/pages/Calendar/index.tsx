@@ -131,14 +131,14 @@ export function Calendar() {
           />
         </div>
         <PdfFetcher currentMonth={currentMonth} pdfMutation={pdfMutation} />
-        {me.userRole === 'ROLE_ADMIN' && (
+        {me.role === 'ROLE_ADMIN' && (
           <SelectUsers
             selectedUser={selectedUser}
             setSelectedUser={setSelectedUser}
           />
         )}
       </div>
-      {me.userRole === 'ROLE_USER' && (
+      {me.role === 'ROLE_USER' && (
         <HoursForm
           isDialogOpen={isDialogOpen}
           setDialogOpened={setDialogOpened}

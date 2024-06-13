@@ -31,7 +31,6 @@ import {
 } from '@tanstack/react-table';
 import * as React from 'react';
 
-import PdfFetcher from './PdfFetcher';
 import { UserForm } from './UserForm';
 
 interface DataTableProps<TData, TValue> {
@@ -192,10 +191,12 @@ export function DataTable<TData, TValue>({
           disabled={!table.getCanNextPage()}>
           Następna
         </Button>
-        <UserForm
-          isOpen={isDialogOpen}
-          onOpenChange={() => setDialogOpen(!isDialogOpen)}
-        />
+        {userRole === 'ROLE_ADMIN' && (
+          <UserForm
+            isOpen={isDialogOpen}
+            onOpenChange={() => setDialogOpen(!isDialogOpen)}
+          />
+        )}
       </div>
     </div>
   );

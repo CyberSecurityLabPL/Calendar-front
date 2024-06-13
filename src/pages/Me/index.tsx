@@ -23,9 +23,9 @@ const Me = () => {
         Notice how when you hover over this button you can see in your browser devtools that the data prefetches. 
         That's because we've defined a loader in the '/users' route!
       */}
-      <Link to="/users">Link to users table</Link>
+      {me.role === 'ROLE_ADMIN' && <Link to="/users">Link to users table</Link>}
       <Link to="/calendar">Link to calendar</Link>
-      <Link to="/hoursTable">Link to hours</Link>
+      {me.role === 'ROLE_USER' && <Link to="/hoursTable">Link to hours</Link>}
     </>
   );
 };
