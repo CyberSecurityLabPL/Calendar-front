@@ -1,18 +1,22 @@
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import usePdf from '@/hooks/usePdf';
 import React, { useEffect, useState } from 'react';
 
 type PdfFetcherProps = {
-  currentMonth: () => string;
+  currentMonth: string;
+  pdfMutation: any; // Adjust the type according to your actual mutation object
 };
 
-const PdfFetcher: React.FC<PdfFetcherProps> = ({ currentMonth }) => {
-  const [month, setMonth] = useState(currentMonth() || '2024-06');
-  const { pdfMutation } = usePdf(month);
+const PdfFetcher: React.FC<PdfFetcherProps> = ({
+  currentMonth,
+  pdfMutation
+}) => {
+  const [month, setMonth] = useState(currentMonth);
+
+  useEffect(() => {
+    setMonth(currentMonth);
+  }, [currentMonth]);
 
   const handleFetchPdf = () => {
-    const month = currentMonth();
     pdfMutation.mutate(month);
   };
 

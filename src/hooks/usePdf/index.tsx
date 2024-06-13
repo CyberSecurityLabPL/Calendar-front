@@ -1,12 +1,13 @@
 import { URLS } from '@/config/urls';
 import { HoursPdf } from '@/types/HoursPdf';
 import { Axios } from '@/utils/Axios';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 
-const usePdf = (month: string) => {
+const usePdf = (month: string, userId: string | null) => {
   const pdfMutation = useMutation({
-    mutationFn: (month: string): Promise<HoursPdf | void> =>
+    mutationFn: (): Promise<HoursPdf | void> =>
       Axios.get(URLS.GET_MONTHLY_HOURS_PDF(month), {
+        params: { userId: userId },
         responseType: 'blob'
       }).then(res => {
         const url = window.URL.createObjectURL(new Blob([res.data]));
@@ -18,8 +19,10 @@ const usePdf = (month: string) => {
         link.remove();
       })
   });
+
   return {
     pdfMutation
   };
 };
+
 export default usePdf;

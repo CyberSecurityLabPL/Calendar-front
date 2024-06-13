@@ -1,11 +1,12 @@
 import useMe from '@/hooks/useMe';
+import usePdf from '@/hooks/usePdf';
 import useUserHours from '@/hooks/useUserHours';
 import { Hours } from '@/types/Hours';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 
 import PdfFetcher from '../Users/components/PdfFetcher';
 import SelectUsers from '../Users/components/selectUsers';
@@ -16,8 +17,9 @@ export function Calendar() {
   const [isDialogOpen, setDialogOpened] = useState(false);
   const [event, setEvent] = useState<Hours | null>(null);
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
+  const [currentMonth, setCurrentMonth] = useState<string>('2024-06');
   const { me } = useMe();
-  const { userHours, userHoursLoading, userHoursError } = useUserHours(
+  const { userHours } = useUserHours(
     selectedUser || '074221c8-1545-4e4b-a241-60addeaa0764'
   );
 
@@ -26,7 +28,7 @@ export function Calendar() {
 
   const calendarRef = useRef<FullCalendar | null>(null);
 
-  const getCurrentMonth = () => {
+  const getCurrentMonth = useCallback(() => {
     if (!calendarRef.current) return '2024-06';
     const calendarApi = calendarRef.current.getApi();
     const date = calendarApi.getDate();
@@ -42,7 +44,13 @@ export function Calendar() {
     const formattedMonth = month < 10 ? `0${month}` : month;
 
     return `${year}-${formattedMonth}`;
-  };
+  }, []);
+
+  useEffect(() => {
+    setCurrentMonth(getCurrentMonth());
+  }, [selectedUser, getCurrentMonth]);
+
+  const { pdfMutation } = usePdf(currentMonth, selectedUser);
 
   const handleDateClick = (info: any) => {
     setSelectedDate(info.dateStr);
@@ -58,6 +66,10 @@ export function Calendar() {
     if (!event) return;
     setDialogOpened(true);
     setEvent(event);
+  };
+
+  const handleDatesSet = () => {
+    setCurrentMonth(getCurrentMonth());
   };
 
   return (
@@ -113,9 +125,10 @@ export function Calendar() {
                 <div>{arg.event.title}</div>
               </div>
             )}
+            datesSet={handleDatesSet} // This will trigger the month update when the calendar view changes
           />
         </div>
-        <PdfFetcher currentMonth={getCurrentMonth} />
+        <PdfFetcher currentMonth={currentMonth} pdfMutation={pdfMutation} />
         <SelectUsers
           selectedUser={selectedUser}
           setSelectedUser={setSelectedUser}
