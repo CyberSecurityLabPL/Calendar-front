@@ -1,3 +1,4 @@
+import useHours from '@/hooks/useHours';
 import useMe from '@/hooks/useMe';
 import usePdf from '@/hooks/usePdf';
 import useUserHours from '@/hooks/useUserHours';
@@ -22,9 +23,10 @@ export function Calendar() {
   const { userHours } = useUserHours(
     selectedUser || '074221c8-1545-4e4b-a241-60addeaa0764'
   );
+  const { hours } = useHours();
 
   const isAdmin = me && me.role === 'ROLE_ADMIN';
-  const data = isAdmin ? userHours : null;
+  const data = isAdmin ? userHours : hours;
 
   const calendarRef = useRef<FullCalendar | null>(null);
 
@@ -129,12 +131,13 @@ export function Calendar() {
           />
         </div>
         <PdfFetcher currentMonth={currentMonth} pdfMutation={pdfMutation} />
-        <SelectUsers
-          selectedUser={selectedUser}
-          setSelectedUser={setSelectedUser}
-        />
+        {me.userRole === 'ROLE_ADMIN' && (
+          <SelectUsers
+            selectedUser={selectedUser}
+            setSelectedUser={setSelectedUser}
+          />
+        )}
       </div>
-
       {me.userRole === 'ROLE_USER' && (
         <HoursForm
           isDialogOpen={isDialogOpen}
@@ -144,7 +147,7 @@ export function Calendar() {
           setEvent={setEvent}
           event={event}
         />
-      )}
+      )}{' '}
     </>
   );
 }

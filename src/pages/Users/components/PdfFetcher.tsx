@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 
 type PdfFetcherProps = {
   currentMonth: string;
-  pdfMutation: any; // Adjust the type according to your actual mutation object
+  pdfMutation: any;
 };
 
 const PdfFetcher: React.FC<PdfFetcherProps> = ({
