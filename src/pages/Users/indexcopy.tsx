@@ -13,7 +13,7 @@ export default function HoursTable() {
     sorting: [
       {
         id: 'startTime',
-        desc: true // Sortowanie malejące (od najnowszych do najstarszych)
+        desc: true
       }
     ]
   };

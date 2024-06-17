@@ -26,7 +26,9 @@ export function Calendar() {
   const { hours } = useHours();
 
   const isAdmin = me && me.role === 'ROLE_ADMIN';
-  const data = isAdmin ? userHours : hours;
+  const isManager = me && me.role === 'ROLE_MANAGER';
+  const isAdminOrManager = isAdmin || isManager;
+  const data = isAdminOrManager ? userHours : hours;
 
   const calendarRef = useRef<FullCalendar | null>(null);
 
@@ -131,7 +133,7 @@ export function Calendar() {
           />
         </div>
         <PdfFetcher currentMonth={currentMonth} pdfMutation={pdfMutation} />
-        {me.role === 'ROLE_ADMIN' && (
+        {(me.role === 'ROLE_ADMIN' || me.role === 'ROLE_MANAGER') && (
           <SelectUsers
             selectedUser={selectedUser}
             setSelectedUser={setSelectedUser}
