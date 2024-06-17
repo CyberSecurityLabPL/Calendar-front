@@ -7,27 +7,27 @@ import {
 } from '@/components/ui/select';
 import useUsers from '@/hooks/useUsers';
 
-interface SelectUsersProps {
-  selectedUser: string | null;
-  setSelectedUser: (userId: string | null) => void;
+interface SelectManagerProps {
+  selectedManager: string | null;
+  setSelectedManager: (managerId: string | null) => void;
 }
 
-const SelectUsers: React.FC<SelectUsersProps> = ({
-  selectedUser,
-  setSelectedUser
+const SelectManager: React.FC<SelectManagerProps> = ({
+  selectedManager,
+  setSelectedManager
 }) => {
   const { users, usersLoading, usersError } = useUsers();
 
   const handleChange = (value: string) => {
-    setSelectedUser(value);
+    setSelectedManager(value);
   };
 
-  const filteredUsers = users?.filter(user => user.role === 'ROLE_USER');
+  const filteredManagers = users?.filter(user => user.role === 'ROLE_MANAGER');
 
   return (
     <Select onValueChange={handleChange}>
       <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder="Użytkownicy" />
+        <SelectValue placeholder="Menadżerowie" />
       </SelectTrigger>
       <SelectContent>
         {usersLoading ? (
@@ -38,15 +38,15 @@ const SelectUsers: React.FC<SelectUsersProps> = ({
           <SelectItem value="" disabled>
             Błąd ładowania danych
           </SelectItem>
-        ) : filteredUsers && filteredUsers.length > 0 ? (
-          filteredUsers.map(user => (
-            <SelectItem key={user.id} value={user.id}>
-              {user.lastName}
+        ) : filteredManagers && filteredManagers.length > 0 ? (
+          filteredManagers.map(manager => (
+            <SelectItem key={manager.id} value={manager.id}>
+              {manager.lastName}
             </SelectItem>
           ))
         ) : (
           <SelectItem value="" disabled>
-            Brak użytkowników
+            Brak menadżerów
           </SelectItem>
         )}
       </SelectContent>
@@ -54,4 +54,4 @@ const SelectUsers: React.FC<SelectUsersProps> = ({
   );
 };
 
-export default SelectUsers;
+export default SelectManager;

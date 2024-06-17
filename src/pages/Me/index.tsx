@@ -14,9 +14,14 @@ const Me = () => {
       {me.role === 'ROLE_ADMIN' && <Link to="/users">Link to users table</Link>}
       <Link to="/calendar">Link to calendar</Link>
       {me.role === 'ROLE_USER' && <Link to="/hoursTable">Link to hours</Link>}
-      <div className="ml-10">
-        <MyCarousel hours={hours ?? []} />
-      </div>
+      {me.role === 'ROLE_USER' && (
+        <div className="ml-10">
+          <MyCarousel hours={hours ?? []} />
+        </div>
+      )}
+      {me.role === 'ROLE_ADMIN' && (
+        <Link to="/assignUserToManager">Link to user assignment</Link>
+      )}
     </>
   );
 };

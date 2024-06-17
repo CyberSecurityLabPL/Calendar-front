@@ -29,6 +29,7 @@ import {
   Bird,
   CalendarDays,
   LifeBuoy,
+  Network,
   Rabbit,
   Settings,
   Sheet,
@@ -73,6 +74,13 @@ export function Dashboard() {
             <Link to="/users">
               <Button variant="outline" size="icon" className="mb-4">
                 <Users className="size-6 " />
+              </Button>
+            </Link>
+          )}
+          {me.role === 'ROLE_ADMIN' && (
+            <Link to="/assignUserToManager">
+              <Button variant="outline" size="icon" className="mb-4">
+                <Network className="size-6 " />
               </Button>
             </Link>
           )}

@@ -11,6 +11,9 @@ export const URLS = {
   DELETE_USER: (id: string) => `/users/${id}`,
   ME: () => '/users/me',
 
+  ASSIGN_MANAGER: (selectedManager: string, selectedUser: string) =>
+    `/users/assignManager/${selectedManager}/${selectedUser}`,
+
   GET_HOURS: () => '/hours/getAllHoursForUser',
   GET_HOURS_FOR_USER: () => `/hours/getAllHoursForUser`,
   GET_MONTHLY_HOURS: (date: string) => `/users/monthlyTasks/${date}`,
