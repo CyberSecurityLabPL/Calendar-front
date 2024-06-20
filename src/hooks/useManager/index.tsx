@@ -1,33 +1,32 @@
 // useAssignManager.ts
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { URLS } from '@/config/urls';
+import { User } from '@/types/User';
+import { Axios } from '@/utils/Axios';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { assignManagerQueryOptions } from './assignManagerQueryOptions';
+interface AssignManagerParams {
+  managerId: string;
+  userId: string;
+}
 
-export const useAssignManager = (
-  selectedManager: string | null,
-  selectedUser: string | null
-) => {
-  if (!selectedManager || !selectedUser) {
-    return {
-      assignManager: null,
-      assignManagerRefetch: () => Promise.reject('Missing parameters'),
-      assignManagerLoading: false,
-      assignManagerError: 'Missing parameters'
-    };
-  }
-
+export const useManager = () => {
+  const queryClient = useQueryClient();
   const {
-    data: assignManager,
-    refetch: assignManagerRefetch,
-    isLoading: assignManagerLoading,
+    mutateAsync: assignManager,
+    isPending: assignManagerLoading,
     isError: assignManagerError
-  } = useSuspenseQuery(
-    assignManagerQueryOptions(selectedManager, selectedUser)
-  );
-
+  } = useMutation({
+    mutationFn: ({
+      managerId,
+      userId
+    }: AssignManagerParams): Promise<User | void> =>
+      Axios.post(URLS.ASSIGN_MANAGER(managerId, userId)).then(res => {
+        queryClient.invalidateQueries({ queryKey: ['users'] });
+        return res.data;
+      })
+  });
   return {
     assignManager,
-    assignManagerRefetch,
     assignManagerLoading,
     assignManagerError
   };

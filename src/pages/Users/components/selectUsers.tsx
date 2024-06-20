@@ -9,7 +9,9 @@ import useUsers from '@/hooks/useUsers';
 
 interface SelectUsersProps {
   selectedUser: string | null;
-  setSelectedUser: (userId: string | null) => void;
+  setSelectedUser: (
+    userId: string | null | '074221c8-1545-4e4b-a241-60addeaa0764'
+  ) => void;
 }
 
 const SelectUsers: React.FC<SelectUsersProps> = ({

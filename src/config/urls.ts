@@ -13,6 +13,7 @@ export const URLS = {
 
   ASSIGN_MANAGER: (selectedManager: string, selectedUser: string) =>
     `/users/assignManager/${selectedManager}/${selectedUser}`,
+  GET_SUBORDINATES: () => '/users/subordinates',
 
   GET_HOURS: () => '/hours/getAllHoursForUser',
   GET_HOURS_FOR_USER: () => `/hours/getAllHoursForUser`,

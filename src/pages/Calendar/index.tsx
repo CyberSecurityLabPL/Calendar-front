@@ -129,7 +129,7 @@ export function Calendar() {
                 <div>{arg.event.title}</div>
               </div>
             )}
-            datesSet={handleDatesSet} // This will trigger the month update when the calendar view changes
+            datesSet={handleDatesSet}
           />
         </div>
         <PdfFetcher currentMonth={currentMonth} pdfMutation={pdfMutation} />
