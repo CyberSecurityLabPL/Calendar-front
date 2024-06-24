@@ -13,29 +13,29 @@ const Me = () => {
 
   return (
     <div className="py-2 px-10">
-      <Card className="p-4 mb-4 text-center">
+      <Card className="p-4 mb-4 text-center flex items-center justify-center">
         <div className="mb-4">
-          Welcome {me?.firstName} {me?.lastName}! <br /> Your email is{' '}
+          Witaj {me?.firstName} {me?.lastName}! <br /> Twój e-mail to:{' '}
           {me?.email}.
         </div>
       </Card>
       <div className="flex flex-wrap gap-4">
         {me.role === 'ROLE_ADMIN' && (
-          <div className="flex-1 min-w-[200px]">
-            <Card className="p-4 mb-4  text-center">
-              <Link to="/users">Link to users table</Link>
+          <div className="flex-1 min-w-[200px] flex">
+            <Card className="p-4 mb-2 flex-1 text-center h-full flex items-center justify-center">
+              <Link to="/users">Link do listy użytkowników</Link>
             </Card>
           </div>
         )}
-        <div className="flex-1 min-w-[200px]">
-          <Card className="p-4 mb-4  text-center">
-            <Link to="/calendar">Link to calendar</Link>
+        <div className="flex-1 min-w-[200px] flex">
+          <Card className="p-4 mb-2 flex-1 text-center h-full flex items-center justify-center">
+            <Link to="/calendar">Link do kalendarza</Link>
           </Card>
         </div>
         {me.role === 'ROLE_USER' && (
           <div className="flex-1 min-w-[200px]">
             <Card className="p-4 mb-4 text-center">
-              <Link to="/hoursTable">Link to hours</Link>
+              <Link to="/hoursTable">Link do listy godzin</Link>
             </Card>
           </div>
         )}
@@ -49,8 +49,10 @@ const Me = () => {
         )}
         {me.role === 'ROLE_ADMIN' && (
           <div className="flex-1 min-w-[200px]">
-            <Card className="p-4 mb-4 text-center">
-              <Link to="/assignUserToManager">Link to user assignment</Link>
+            <Card className="p-4 my-4 text-center">
+              <Link to="/assignUserToManager">
+                Link do przypisywania użytkowników do managera
+              </Link>
             </Card>
           </div>
         )}
