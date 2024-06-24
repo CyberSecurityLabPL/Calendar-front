@@ -17,6 +17,7 @@ import { Route as DashboardUsersImport } from './routes/_dashboard/users'
 import { Route as DashboardMeImport } from './routes/_dashboard/me'
 import { Route as DashboardHoursTableImport } from './routes/_dashboard/hoursTable'
 import { Route as DashboardCalendarImport } from './routes/_dashboard/calendar'
+import { Route as DashboardAssignUserToManagerImport } from './routes/_dashboard/assignUserToManager'
 
 // Create/Update Routes
 
@@ -50,6 +51,12 @@ const DashboardCalendarRoute = DashboardCalendarImport.update({
   getParentRoute: () => DashboardRoute,
 } as any)
 
+const DashboardAssignUserToManagerRoute =
+  DashboardAssignUserToManagerImport.update({
+    path: '/assignUserToManager',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -61,6 +68,10 @@ declare module '@tanstack/react-router' {
     '/login': {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
+    }
+    '/_dashboard/assignUserToManager': {
+      preLoaderRoute: typeof DashboardAssignUserToManagerImport
+      parentRoute: typeof DashboardImport
     }
     '/_dashboard/calendar': {
       preLoaderRoute: typeof DashboardCalendarImport
@@ -85,6 +96,7 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren([
   DashboardRoute.addChildren([
+    DashboardAssignUserToManagerRoute,
     DashboardCalendarRoute,
     DashboardHoursTableRoute,
     DashboardMeRoute,

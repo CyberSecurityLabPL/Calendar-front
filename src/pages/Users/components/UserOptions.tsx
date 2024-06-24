@@ -7,7 +7,7 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import useUsers from '@/hooks/useUsers';
-import { UserRole } from '@/types/User';
+import { User } from '@/types/User';
 import { MoreHorizontal } from 'lucide-react';
 import React from 'react';
 import { toast } from 'react-toastify';
@@ -15,7 +15,7 @@ import { toast } from 'react-toastify';
 import { UserForm } from './UserForm';
 
 interface UserOptionsProps {
-  user: UserRole;
+  user: User;
 }
 
 const UserOptions = ({ user }: UserOptionsProps) => {

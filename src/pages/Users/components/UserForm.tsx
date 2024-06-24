@@ -26,7 +26,7 @@ import {
 } from '@/components/ui/popover';
 import useCompanies from '@/hooks/useCompanies';
 import useUsers from '@/hooks/useUsers';
-import { Contract, Role, UserRole, UserRequest } from '@/types/User';
+import { Contract, Role, User, UserRequest } from '@/types/User';
 import { zodResolver } from '@hookform/resolvers/zod';
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -67,7 +67,7 @@ const formSchema = z.object({
 });
 
 interface UserFormProps {
-  user?: UserRole;
+  user?: User;
   isOpen: boolean;
   onOpenChange(open: boolean): void;
 }
