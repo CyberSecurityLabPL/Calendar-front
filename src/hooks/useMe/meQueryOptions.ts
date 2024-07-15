@@ -1,5 +1,4 @@
 import { URLS } from '@/config/urls';
-import { UserRequest, User } from '@/types/User';
 import { Axios } from '@/utils/Axios';
 import { queryOptions } from '@tanstack/react-query';
 

@@ -1,11 +1,10 @@
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import useSubordinates from '@/hooks/useSubordinates';
 import { User } from '@/types/User';
-import { Clock9, Info } from 'lucide-react';
+import { Info } from 'lucide-react';
 
 const SubordinatesInfo = () => {
   const { subordinates } = useSubordinates();
-  const numberOfSubordinates = subordinates ? subordinates.length : 0;
 
   return (
     <Card className="w-86 h-64 flex flex-col justify-center items-center">

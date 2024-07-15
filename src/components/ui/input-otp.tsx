@@ -1,5 +1,4 @@
 import { cn } from '@/lib/utils';
-import { DashIcon } from '@radix-ui/react-icons';
 import { OTPInput, OTPInputContext } from 'input-otp';
 import * as React from 'react';
 

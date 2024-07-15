@@ -13,7 +13,6 @@ interface SelectManagerProps {
 }
 
 const SelectManager: React.FC<SelectManagerProps> = ({
-  selectedManager,
   setSelectedManager
 }) => {
   const { users, usersLoading, usersError } = useUsers();

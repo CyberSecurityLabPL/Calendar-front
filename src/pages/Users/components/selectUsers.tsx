@@ -15,7 +15,6 @@ interface SelectUsersProps {
 }
 
 const SelectUsers: React.FC<SelectUsersProps> = ({
-  selectedUser,
   setSelectedUser
 }) => {
   const { users, usersLoading, usersError } = useUsers();

@@ -5,12 +5,11 @@ import {
   useMutation,
   useQuery,
   useQueryClient,
-  useSuspenseQuery
 } from '@tanstack/react-query';
 
 import { hoursQueryOptions } from './hoursQueryOptions';
 
-const useHours = (date?: string) => {
+const useHours = () => {
   const queryClient = useQueryClient();
 
   const {
