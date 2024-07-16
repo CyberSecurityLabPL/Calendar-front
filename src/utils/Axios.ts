@@ -3,7 +3,7 @@ import { Route } from '@/routes/__root';
 import axios from 'axios';
 
 // axios.defaults.baseURL = 'http://10.34.100.134:8888/api';
-axios.defaults.baseURL = 'http://10.34.100.134:8888/api';
+axios.defaults.baseURL = 'https://godziny.int.perceptus.pl/api' 
 
 axios.defaults.maxRedirects = 0;
 axios.defaults.withCredentials = true;
