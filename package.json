@@ -13,7 +13,9 @@
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
-    "@fullcalendar/react": "^6.1.13",
+    "@fullcalendar/core": "^6.1.15",
+    "@fullcalendar/daygrid": "^6.1.15",
+    "@fullcalendar/react": "^6.1.15",
     "@hilla/react-components": "^2.3.13",
     "@hookform/resolvers": "^3.3.4",
     "@mui/material": "^5.15.18",
@@ -40,6 +42,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
     "dayjs": "^1.11.11",
+    "embla-carousel-react": "^8.1.5",
     "fullcalendar": "^6.1.13",
     "input-otp": "^1.2.4",
     "lucide-react": "^0.378.0",

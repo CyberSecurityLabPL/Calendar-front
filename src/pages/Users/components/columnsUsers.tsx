@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import userFieldNames, { Contract, Role, UserRole } from '@/types/User';
+import userFieldNames, { Contract, Role, User } from '@/types/User';
 import { ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown } from 'lucide-react';
 
@@ -17,7 +17,7 @@ const contractTranslation = {
   [Contract.PRACA]: 'Umowa o pracę'
 };
 
-export const columns: ColumnDef<UserRole>[] = [
+export const columns: ColumnDef<User>[] = [
   {
     id: 'select',
     header: ({ table }) => (

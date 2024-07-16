@@ -10,7 +10,7 @@ export enum Contract {
   PRACA = 'UMOWA_O_PRACE'
 }
 
-export interface UserRole {
+export interface User {
   id: string;
   firstName: string;
   lastName: string;
@@ -22,7 +22,7 @@ export interface UserRole {
   workStart: Date;
   role: Role;
 }
-export interface UserRequest extends Omit<UserRole, 'companyDto' | 'id'> {
+export interface UserRequest extends Omit<User, 'companyDto' | 'id'> {
   id?: string;
   companyId: string;
 }

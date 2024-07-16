@@ -23,19 +23,27 @@ import {
   TooltipContent,
   TooltipTrigger
 } from '@/components/ui/tooltip';
+import useMe from '@/hooks/useMe';
 import { Link, Outlet } from '@tanstack/react-router';
 import {
   Bird,
+  CalendarDays,
   LifeBuoy,
+  Network,
   Rabbit,
   Settings,
+  Sheet,
   SquareUser,
   Triangle,
   Turtle,
   Users
 } from 'lucide-react';
 
+import { useLogout } from './logout';
+
 export function Dashboard() {
+  const { me } = useMe();
+  const logout = useLogout();
   return (
     <div className="grid h-screen w-full pl-[53px]">
       <aside className="inset-y fixed  left-0 z-20 flex h-full flex-col border-r">
@@ -61,12 +69,35 @@ export function Dashboard() {
             </Tooltip>
           </TooltipProvider>
         </nav> */}
-        <div className="flex items-start justify-center mt-4 ">
-          <Link to="/users">
-            <Button variant="outline" size="icon">
-              <Users className="size-6 " />
-            </Button>
-          </Link>
+        <div className="flex flex-col items-center justify-center mt-4 ">
+          {(me.role === 'ROLE_ADMIN' || me.role === 'ROLE_MANAGER') && (
+            <Link to="/users">
+              <Button variant="outline" size="icon" className="mb-4">
+                <Users className="size-6 " />
+              </Button>
+            </Link>
+          )}
+          {me.role === 'ROLE_ADMIN' && (
+            <Link to="/assignUserToManager">
+              <Button variant="outline" size="icon" className="mb-4">
+                <Network className="size-6 " />
+              </Button>
+            </Link>
+          )}
+          {me.role === 'ROLE_USER' && (
+            <Link to="/calendar">
+              <Button variant="outline" size="icon" className="mb-4">
+                <CalendarDays className="size-6 " />
+              </Button>
+            </Link>
+          )}
+          {me.role === 'ROLE_USER' && (
+            <Link to="/hoursTable">
+              <Button variant="outline" size="icon" className="mb-4">
+                <Sheet className="size-6 " />
+              </Button>
+            </Link>
+          )}
         </div>
 
         <nav className="mt-auto grid gap-1 p-2">
@@ -91,12 +122,13 @@ export function Dashboard() {
                   variant="ghost"
                   size="icon"
                   className="mt-auto rounded-lg"
-                  aria-label="Konto">
+                  aria-label="Konto"
+                  onClick={logout}>
                   <SquareUser className="size-5" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent side="right" sideOffset={5}>
-                Konto
+                Wyloguj
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
